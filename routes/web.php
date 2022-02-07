@@ -25,6 +25,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/employees', 'EmployeeController@index')->name('employees');
 Route::get('/get-employees-data', 'EmployeeController@getEmployeesData');
 
+Route::get('/view-history-logs', 'EmployeeController@viewHistoryLogs');
+Route::get('/view-history-logs-data', 'EmployeeController@viewHistoryLogsData');
+
 //Users
 Route::get('/users', 'UsersController@index')->name('users');
 Route::get('/get-users-data', 'UsersController@getUsersData');

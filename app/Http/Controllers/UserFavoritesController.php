@@ -36,7 +36,7 @@ class UserFavoritesController extends Controller
                 $data['auth_user_id'] = Auth::user()->id;
                 UserFavorite::create($data);
                 DB::commit();
-                $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64')
+                $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','door_id_number')
                                             ->with('companies','departments','locations','employee_current_location_latest')
                                             ->with(array('user_favorite'=>function($q){
                                                 $q->where('auth_user_id',Auth::user()->id);
@@ -51,7 +51,7 @@ class UserFavoritesController extends Controller
                 $data['status'] = $user_favorite['status'] == '1' ? 0 : 1;
                 $user_favorite->update($data);
                 DB::commit();
-                $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64')
+                $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','door_id_number')
                                             ->with('companies','departments','locations','employee_current_location_latest')
                                             ->with(array('user_favorite'=>function($q){
                                                 $q->where('auth_user_id',Auth::user()->id);

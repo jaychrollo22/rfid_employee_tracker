@@ -1,37 +1,24 @@
 <template>
 <div>
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        <!--begin::Subheader-->
         <div class="subheader py-2 py-lg-12 subheader-transparent" id="kt_subheader">
             <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-                <!--begin::Info-->
                 <div class="d-flex align-items-center flex-wrap mr-1">
-                    <!--begin::Heading-->
                     <div class="d-flex flex-column">
-                        <!--begin::Title-->
                         <h2 class="text-white font-weight-bold my-2 mr-5">Employees</h2>
-                        <!--end::Title-->
-                        <!--begin::Breadcrumb-->
                         <div class="d-flex align-items-center font-weight-bold my-2">
-                            <!--begin::Item-->
                             <a href="#" class="opacity-75 hover-opacity-100">
                                 <i class="flaticon2-shelter text-white icon-1x"></i>
                             </a>
-                            <!--end::Item-->
-                            <!--begin::Item-->
                             <span class="label label-dot label-sm bg-white opacity-75 mx-3"></span>
                             <a href="" class="text-white text-hover-white opacity-75 hover-opacity-100">Track and Trace Employee</a>
-                            <!--end::Item-->
                         </div>
-                        <!--end::Breadcrumb-->
                     </div>
-                    <!--end::Heading-->
                 </div>
             </div>
         </div>
 
         <div class="d-flex flex-column-fluid">
-            <!--begin::Container-->
             <div class="container">
                 <div class="card card-custom gutter-b">
                     <div class="card-body">
@@ -57,24 +44,26 @@
                                     <input type="text" class="form-control" placeholder="Search Employee" v-model="keywords">
                                 </div>
                             </div>
-                            <div class="col-sm-1 mt-4">
-                                <div class="form-group">
-                                    <select class="form-control" v-model="itemsPerPageEmployee">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="float-right">
+                            Show
+                            <select v-model="itemsPerPageEmployee">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            Total : {{ filteredEmployees.length }}
+                        </div>
+                        <div class="float-left mt-5">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input" type="checkbox" v-model="show_favorites" @change="saveSessionShowFavorites" />
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Show Favorites
+                                </label>
                             </div>
                         </div>
-
-                        <div class="form-check form-check-custom form-check-solid float-right">
-                            <input class="form-check-input" type="checkbox" v-model="show_favorites" @change="saveSessionShowFavorites" />
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Show Favorites
-                            </label>
-                        </div>
+                        
                         <!-- <hr> -->
                         <div class="table-responsive">
                             <table class="table table-checkable" id="kt_datatable">
@@ -105,19 +94,19 @@
                                         <td style="vertical-align: middle;">
                                            <strong style="font-size:12px">{{employee.last_name + ', ' + employee.first_name}}</strong><br>
                                            <span style="font-size:11px"> {{employee.position}} | {{ employee.departments.length > 0 ? employee.departments[0].name : ""}} | {{ employee.companies.length > 0 ? employee.companies[0].name : ""}}</span> <br>
-                                           <span style="font-size:11px"> {{employee.rfid_64}}</span>
+                                           <span style="font-size:11px"> {{ employee.door_id_number ? employee.door_id_number + ' |' : ""  }} {{employee.rfid_64}}</span>
                                         </td>
                                         <td style="vertical-align: middle;">
                                             <div v-if="employee.employee_current_location_latest">
                                                 <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
-                                                <small style="font-size:11px">{{employee.employee_current_location_latest.local_time}}</small>
+                                                <small style="font-size:11px">{{ changeDateFormat(employee.employee_current_location_latest.local_time)}}</small>
                                             </div>
                                             <div v-else>
                                                 <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Detected</span>
                                             </div>
                                         </td>
                                         <td align="center" style="vertical-align: middle;">
-                                            <i class="fas fa-street-view text-warning" style="cursor:pointer;" title="View Logs"></i>
+                                            <a :href="'/view-history-logs?id='+employee.id+'&v=' + Math.random()" target="_blank"><i class="fas fa-street-view text-warning" style="cursor:pointer;" title="View Logs"></i></a>
                                         </td>
                                     </tr>
                                     <tr v-if="loading">
@@ -181,6 +170,10 @@
             this.getSessionShowFavorites();
         },
         methods: {
+            changeDateFormat(log_time){
+                var new_log_time = moment(log_time).format('LL LTS');
+                return new_log_time;
+            },
             saveSessionShowFavorites(){
                 let v = this;
                 let formData = new FormData();
@@ -235,7 +228,6 @@
             },
             getRfidDoors() {
                 let v = this;
-                v.loading = true;
                 v.doors = [];
                 axios.get('/get-rfid-settings-doors-data')
                 .then(response => { 
@@ -292,10 +284,13 @@
                 worksheet.getCell('B1').value = 'FirstName';
                 worksheet.getCell('C1').value = 'MiddleName';
                 worksheet.getCell('D1').value = 'LastName';
-                worksheet.getCell('E1').value = 'CardNo';
-                worksheet.getCell('F1').value = 'CodeType';
-                worksheet.getCell('G1').value = 'CardType';
-                worksheet.getCell('H1').value = 'CardStatus';
+                worksheet.getCell('E1').value = 'EmployeeID';
+                worksheet.getCell('F1').value = 'Department';
+                worksheet.getCell('G1').value = 'JobTitle';
+                worksheet.getCell('H1').value = 'CardNo';
+                worksheet.getCell('I1').value = 'CodeType';
+                worksheet.getCell('J1').value = 'CardType';
+                worksheet.getCell('K1').value = 'CardStatus';
 
                 let worksheet_ctr = 2;
                 v.filteredEmployees.forEach(function(w){
@@ -304,18 +299,21 @@
                     worksheet.getCell('B'+worksheet_ctr).value = w.first_name;
                     worksheet.getCell('C'+worksheet_ctr).value = w.middle_name;
                     worksheet.getCell('D'+worksheet_ctr).value = w.last_name;
+                    worksheet.getCell('E'+worksheet_ctr).value = w.id;
+                    worksheet.getCell('F'+worksheet_ctr).value = w.departments ? w.departments[0].name : "";
+                    worksheet.getCell('G'+worksheet_ctr).value = w.position;
 
                     if(w.rfid_64){
                         let rfid_64 = '0' + w.rfid_64;
                         let formated_rfid_64=rfid_64.match(/.{1,4}/g);
-                        worksheet.getCell('E'+worksheet_ctr).value = formated_rfid_64.join(' ');
+                        worksheet.getCell('H'+worksheet_ctr).value = formated_rfid_64.join(' ');
                     }else{
-                        worksheet.getCell('E'+worksheet_ctr).value = '';
+                        worksheet.getCell('H'+worksheet_ctr).value = '';
                     }
 
-                    worksheet.getCell('F'+worksheet_ctr).value = '64';
-                    worksheet.getCell('G'+worksheet_ctr).value = '1';
-                    worksheet.getCell('H'+worksheet_ctr).value = '0';
+                    worksheet.getCell('I'+worksheet_ctr).value = '64';
+                    worksheet.getCell('J'+worksheet_ctr).value = '1';
+                    worksheet.getCell('K'+worksheet_ctr).value = '0';
 
                     worksheet_ctr++;
                 })
@@ -374,11 +372,11 @@
                
             },
             totalPagesEmployee() {
-                return Math.ceil(Object.values(this.filteredEmployees).length / this.itemsPerPageEmployee)
+                return Math.ceil(Object.values(this.filteredEmployees).length / Number(this.itemsPerPageEmployee))
             },
             filteredEmployeeQueues() {
-                var index = this.currentPageEmployee * this.itemsPerPageEmployee;
-                var queues_array = this.filteredEmployees.slice(index, index + this.itemsPerPageEmployee);
+                var index = this.currentPageEmployee * Number(this.itemsPerPageEmployee);
+                var queues_array = this.filteredEmployees.slice(index, index + Number(this.itemsPerPageEmployee));
 
                 if(this.currentPageEmployee >= this.totalPagesEmployee) {
                     this.currentPageEmployee = this.totalPagesEmployee - 1

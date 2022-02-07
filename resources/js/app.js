@@ -19,7 +19,9 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('employees', require('./components/Employees.vue').default);
+Vue.component('view-history-logs', require('./components/ViewHistoryLogs.vue').default);
 Vue.component('users', require('./components/Users.vue').default);
 Vue.component('activity-logs', require('./components/ActivityLogs.vue').default);
 Vue.component('rfid-controllers', require('./components/RfidControllers.vue').default);
