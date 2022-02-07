@@ -1,38 +1,52 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
-use Illuminate\Http\Request;
+use Illuminate\Console\Command;
 
 use App\AccessLog;
 use App\EmployeeCurrentAreaLocationLog;
 
 use Carbon\Carbon;
 use DB;
-class AccessLogController extends Controller
+
+class TransferAccessLog extends Command
 {
-    public function getAccessLog(){
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'command:transfer_access_log';
 
-        $timestamp_from = date('Y-m-d 8:00:00');
-        $timestamp_to = date('Y-m-d 18:00:00');
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'RFID Transfer Access Logs';
 
-        $date = date('Y-m-d');
-        $time_from = Carbon::parse($timestamp_from)->toTimeString();
-        $time_to = Carbon::parse($timestamp_to)->toTimeString();
-        
-        $access_log = AccessLog::where('MsgID','=','1')
-                                ->whereDate('LocalTime','=',$date)
-                                ->get();
-
-        return $access_log;
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
     }
 
-    
-    public function deleteInvalidAccessLog(){
-        AccessLog::where('MsgID','!=','1')->delete();
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+        $auto_transfer = $this->transferAccessGrantedLogs();
+        $this->info($auto_transfer . ' Logs');
     }
 
-    //Transfer Access Logs to 
     public function transferAccessGrantedLogs(){
         
         $date = date('Y-m-d');
@@ -70,11 +84,9 @@ class AccessLogController extends Controller
                             $x++;
                         }
                     }
-                    
                 }
-                return $reponse = [
-                    'count' => $x
-                ];
+
+                return $x;
             }
         }catch (Exception $e) {
             DB::rollBack();
