@@ -177,6 +177,7 @@
             }
         },
         created () {
+            this.getCurrentTransferAccessLogs();
             this.getRfidDoors();
             this.getHistoryLogs();
         },
@@ -254,6 +255,7 @@
                 })
             },
             refreshLogs() {
+                this.getCurrentTransferAccessLogs();
                 let v = this;
                 v.from = '';
                 v.to = '';
@@ -269,6 +271,9 @@
                     v.errors = error.response.data.error;
                     v.loading_logs = false;
                 })
+            },
+            getCurrentTransferAccessLogs(){
+                axios.get('/transfer-access-log');
             },
             filterLogs() {
                 let v = this;

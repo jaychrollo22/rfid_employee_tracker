@@ -165,6 +165,7 @@
             }
         },
         created () {
+            this.getCurrentTransferAccessLogs();
             this.getRfidDoors();
             this.getEmployees();
             this.getSessionShowFavorites();
@@ -212,8 +213,12 @@
                 }
             },
             refresh(){
+                this.getCurrentTransferAccessLogs();
                 this.getRfidDoors();
                 this.getEmployees();
+            },
+            getCurrentTransferAccessLogs(){
+                axios.get('/transfer-access-log');
             },
             getCurrentLocation(current_location){
                 let v = this;
