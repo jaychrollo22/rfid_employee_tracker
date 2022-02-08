@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\TransferAccessLog::class,
+        Commands\DeleteInvalidAccessLog::class,
     ];
 
     /**
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('command:transfer_access_log')->everyMinute();
+        $schedule->command('command:delete_invalid_access_log')->hourly();
     }
 
     /**
