@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <span class="float-right">
-                                     <i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" @click="refresh"></i> Refresh |
+                                    <i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" @click="refresh"></i> Refresh |
                                     <i class="fas fa-id-badge text-success" title="Registered" style="cursor:pointer;" @click="showFilterEmployees('1')"></i> {{totalRegistered.length}} | 
                                     <i class="fas fa-id-badge text-danger icon-md" title="Not Registered" style="cursor:pointer;" @click="showFilterEmployees('0')"></i> {{totalNotRegistered.length}} | 
                                     <i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;" @click="download"></i> Download
@@ -332,13 +332,13 @@
                         if(v.show_favorites){
                             if(employee.user_favorite.length > 0){
                                 if(employee.user_favorite[0].status == '1'){
-                                    if(self.rfid_64_status){
-                                        if(self.rfid_64_status == '1'){
+                                    if(v.rfid_64_status){
+                                        if(v.rfid_64_status == '1'){
                                             if(employee.rfid_64){
                                                 return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.rfid_64.toLowerCase().includes(this.keywords.toLowerCase())
                                             }
                                         }
-                                        else if(self.rfid_64_status == '0'){
+                                        else if(v.rfid_64_status == '0'){
                                             if(employee.rfid_64 == "" || employee.rfid_64 == null){
                                                 return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase())
                                             }
@@ -349,13 +349,13 @@
                                 }
                             }
                         }else{
-                            if(self.rfid_64_status){
-                                if(self.rfid_64_status == '1'){
+                            if(v.rfid_64_status){
+                                if(v.rfid_64_status == '1'){
                                     if(employee.rfid_64){
                                         return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.rfid_64.toLowerCase().includes(this.keywords.toLowerCase())
                                     }
                                 }
-                                else if(self.rfid_64_status == '0'){
+                                else if(v.rfid_64_status == '0'){
                                     if(employee.rfid_64 == "" || employee.rfid_64 == null){
                                         return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase())
                                     }
@@ -389,9 +389,9 @@
                 return queues_array;
             },
             totalRegistered(){
-                let self = this;
-                if(self.employees){
-                    return Object.values(self.employees).filter(employee => {
+                let v = this;
+                if(v.employees){
+                    return Object.values(v.employees).filter(employee => {
                         if(employee.rfid_64){
                             return employee;
                         }
@@ -401,9 +401,9 @@
                 }
             },
             totalNotRegistered(){
-                let self = this;
-                if(self.employees){
-                    return Object.values(self.employees).filter(employee => {
+                let v = this;
+                if(v.employees){
+                    return Object.values(v.employees).filter(employee => {
                         if(employee.rfid_64 == "" || employee.rfid_64 == null){
                             return employee;
                         }
