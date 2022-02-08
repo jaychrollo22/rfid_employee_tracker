@@ -34,11 +34,15 @@
             <div class="container">
                 <div class="card card-custom gutter-b">
                     <div class="card-body">
-                        <div class="float-right">
-                            <button class="btn btn-sm btn-primary" @click="addRfidController()" :disabled="saveDisable">New Controller</button>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="float-right">
+                                    <button class="btn btn-sm btn-primary" @click="addRfidController()" :disabled="saveDisable">New Controller</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 mt-5 mb-2">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="cursor:pointer">

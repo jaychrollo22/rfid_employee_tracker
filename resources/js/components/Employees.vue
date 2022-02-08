@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-4 mt-4">
+                            <div class="col-sm-4 mt-5">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="cursor:pointer">
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="float-right">
+                        <div class="float-right mt-3">
                             Show
                             <select v-model="itemsPerPageEmployee">
                                 <option value="10">10</option>
@@ -59,7 +59,7 @@
                             <div class="form-check form-check-custom form-check-solid">
                                 <input class="form-check-input" type="checkbox" v-model="show_favorites" @change="saveSessionShowFavorites" />
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    Show Favorites
+                                    &nbsp;Show Favorites
                                 </label>
                             </div>
                         </div>

@@ -36,7 +36,7 @@
                 <div class="card card-custom gutter-b">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 mt-5">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="cursor:pointer">
@@ -46,7 +46,7 @@
                                     <input type="text" class="form-control" placeholder="Search User" v-model="keywords">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mt-5">
                                 <div class="form-group">
                                     <select class="form-control form-control-primary" v-model="filterRole" id="filterRole">
                                         <option value="">Filter by Role</option>
