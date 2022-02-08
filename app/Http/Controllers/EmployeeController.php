@@ -30,7 +30,7 @@ class EmployeeController extends Controller
 
     public function getEmployeesData(Request $request){
         return $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','door_id_number')
-                                        ->with('companies','departments','locations','employee_current_location_latest')
+                                        ->with('companies','departments','locations','employee_current_location_latest.rfid_controller')
                                         ->with(array('user_favorite'=>function($q){
                                             $q->where('auth_user_id',Auth::user()->id);
                                         }))

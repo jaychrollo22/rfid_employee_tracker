@@ -24,7 +24,8 @@
                             <div class="card-body">
                                 <div class="text-enter">
                                     <center>
-                                        <vue-ellipse-progress :progress="100" :legendValue="90" fontSize="2.5rem" color="#003494">
+                                        <vue-ellipse-progress :progress="progressTotalInOffice" :legendValue="totalInOffice.length" fontSize="2.5rem" color="#003494">
+                                            <span slot="legend-value"> </span>
                                             <p slot="legend-caption" style="cursor:pointer;"><strong>Total In Office</strong></p>
                                         </vue-ellipse-progress>
                                     </center>
@@ -40,8 +41,8 @@
                                     <div class="row">
                                         <div class="col-sm-4 mt-5">
                                             <center>
-                                                <vue-ellipse-progress :progress="60" :legendValue="60" color="#00713A" :size="150">
-                                                    <span slot="legend-value"> / {{ 100 }}</span>
+                                                <vue-ellipse-progress :progress="progressBgc" :legendValue="actualInBGC.length" color="#00713A" :size="150">
+                                                    <span slot="legend-value"> / {{ totalInBGC.length }}</span>
                                                     <p slot="legend-caption" style="cursor:pointer;"><strong>BGC</strong></p>
                                                 </vue-ellipse-progress>
                                             </center>
@@ -93,11 +94,79 @@
     export default {
         data() {
             return {
-                key: []
+                employees : [],
+                errors: [],
+                loading: false,
+
+                totalInOffice : [],
+
+                actualInBGC : [],
+                totalInBGC : []
             }
         },
+        created () {
+            this.getEmployees();
+        },
         methods: {
-            name() {
+            getEmployees() {
+                let v = this;
+                v.loading = true;
+                v.employees = [];
+                v.totalInOffice = [];
+                v.actualInBGC = [];
+                v.totalInBGC = [];
+                axios.get('/get-employees-data')
+                .then(response => { 
+                    v.employees = response.data;
+                    response.data.forEach(e => {
+
+                        //Total In BGC
+                        if(e.locations.length > 0){
+                            if(e.locations[0].name == "BGC TAGUIG"){
+                                v.totalInBGC.push(e);
+                            }
+                        }
+
+                        //In Office
+                        if(e.employee_current_location_latest){
+                            v.totalInOffice.push(e);
+
+                            //Actual in BGC
+                            if(e.employee_current_location_latest.rfid_controller){
+                                if(e.employee_current_location_latest.rfid_controller.location == "BGC"){
+                                    v.actualInBGC.push(e);
+                                }
+                            }
+                        }
+                    });
+
+                    v.loading = false;
+                })
+                .catch(error => { 
+                    v.errors = error.response.data.error;
+                    v.loading = false;
+                })
+            },
+        },
+        computed: {
+            progressTotalInOffice(){
+                let  v = this;
+                if(v.totalInOffice.length > 0 && v.employees.length > 0){
+                    var progress = (v.totalInOffice.length / v.employees.length) * 100;
+                    return progress.toFixed(0);
+                }else{
+                    return 0;
+                }
+                
+            },
+            progressBgc(){
+                let  v = this;
+                if(v.actualInBGC.length > 0 && v.totalInBGC.length > 0){
+                    var progress = (v.actualInBGC.length / v.totalInBGC.length) * 100;
+                    return progress.toFixed(0);
+                }else{
+                    return 0;
+                }
                 
             }
         },
