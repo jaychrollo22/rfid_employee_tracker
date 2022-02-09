@@ -25,10 +25,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <span class="float-right">
-                                    <i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" @click="refresh"></i> Refresh |
-                                    <i class="fas fa-id-badge text-success" title="Registered" style="cursor:pointer;" @click="showFilterEmployees('1')"></i> {{totalRegistered.length}} | 
-                                    <i class="fas fa-id-badge text-danger icon-md" title="Not Registered" style="cursor:pointer;" @click="showFilterEmployees('0')"></i> {{totalNotRegistered.length}} | 
-                                    <i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;" @click="download"></i> Download
+                                    <a href="#" @click="refresh" class="text-default"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;"></i> Refresh | </a>
+                                    <a href="#" @click="showFilterEmployees('1')" class="text-default"><i class="fas fa-id-badge text-success" title="Registered" style="cursor:pointer;"></i> {{totalRegistered.length}} |</a> 
+                                    <a href="#" @click="showFilterEmployees('0')" class="text-default"><i class="fas fa-id-badge text-danger icon-md" title="Not Registered" style="cursor:pointer;"></i> {{totalNotRegistered.length}} | </a>
+                                    <a href="#" @click="download" class="text-default"><i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;"></i> Download</a>
                                    
                                 </span>
                             </div>

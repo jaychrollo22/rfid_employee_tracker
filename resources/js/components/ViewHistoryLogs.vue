@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <span class="float-right">
-                                     <i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" @click="refreshLogs"></i> Refresh
+                                     <a href="#" @click="refreshLogs"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" ></i> Refresh</a>
                                 </span>
                             </div>
                         </div>

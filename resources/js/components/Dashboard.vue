@@ -89,14 +89,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label>Search</label>
-                                <input type="text" class="form-control" placeholder="Input here..." v-model="keywords">
+                                <input type="text" class="form-control" placeholder="Search Employee.." v-model="keywords">
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="float-right mt-3">
+                            <div class="float-right">
                                 Show
                                 <select v-model="itemsPerPageEmployee">
                                     <option value="5">5</option>
@@ -163,7 +162,7 @@
                         </div>
                     </div>
                     <div class="row col-md-12" v-if="filteredEmployeeQueues.length">
-                        <div class="float-right">
+                        <div class="text-right">
                             <button :disabled="!showPreviousLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee - 1)"> Previous </button>
                                 <span class="text-dark">Page {{ currentPageEmployee + 1 }} of {{ totalPagesEmployee }}</span>
                             <button :disabled="!showNextLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee + 1)"> Next </button>
@@ -417,6 +416,6 @@
         max-width: 1200px!important;
     }
     #view-data-modal{
-        padding-left: 0px;
+        padding-left: 0px!important;
     }
 </style>
