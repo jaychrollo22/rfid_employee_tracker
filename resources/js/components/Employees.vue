@@ -99,7 +99,7 @@
                                         <td style="vertical-align: middle;">
                                             <div v-if="employee.employee_current_location_latest">
                                                 <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
-                                                <small style="font-size:11px">{{ changeDateFormat(employee.employee_current_location_latest.local_time)}}</small>
+                                                <strong style="font-size:11px">{{ changeDateFormat(employee.employee_current_location_latest.local_time)}}</strong>
                                             </div>
                                             <div v-else>
                                                 <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Detected</span>

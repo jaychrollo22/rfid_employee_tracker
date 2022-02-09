@@ -50,25 +50,17 @@
                                         </div>
                                         <div class="col-sm-4 mt-5">
                                             <center>
-                                                <vue-ellipse-progress :progress="60" :legendValue="60" color="#E2231A" :size="150">
-                                                    <span slot="legend-value"> / {{ 100 }}</span>
+                                                <vue-ellipse-progress :progress="progressManila" :legendValue="actualInManila.length" color="#E2231A" :size="150">
+                                                    <span slot="legend-value"> / {{ totalInManila.length }}</span>
                                                     <p slot="legend-caption" style="cursor:pointer;"><strong>MANILA</strong></p>
                                                 </vue-ellipse-progress>
                                             </center>
                                         </div>
                                         <div class="col-sm-4 mt-5">
                                             <center>
-                                                <vue-ellipse-progress :progress="80" :legendValue="60" color="#FFD840" :size="150">
-                                                    <span slot="legend-value"> / {{ 100 }}</span>
+                                                <vue-ellipse-progress :progress="progressIloilo" :legendValue="actualInIloilo.length" color="#FFD840" :size="150">
+                                                    <span slot="legend-value"> / {{ totalInIloilo.length }}</span>
                                                     <p slot="legend-caption" style="cursor:pointer;"><strong>ILOILO</strong></p>
-                                                </vue-ellipse-progress>
-                                            </center>
-                                        </div>
-                                        <div class="col-sm-4 mt-5">
-                                            <center>
-                                                <vue-ellipse-progress :progress="80" :legendValue="60" color="#FF8300" :size="150">
-                                                    <span slot="legend-value"> / {{ 100 }}</span>
-                                                    <p slot="legend-caption" style="cursor:pointer;"><strong>DAVAO</strong></p>
                                                 </vue-ellipse-progress>
                                             </center>
                                         </div>
@@ -101,7 +93,13 @@
                 totalInOffice : [],
 
                 actualInBGC : [],
-                totalInBGC : []
+                totalInBGC : [],
+
+                actualInManila : [],
+                totalInManila : [],
+
+                actualInIloilo : [],
+                totalInIloilo : [],
             }
         },
         created () {
@@ -115,6 +113,11 @@
                 v.totalInOffice = [];
                 v.actualInBGC = [];
                 v.totalInBGC = [];
+
+                v.actualInManila = [];
+                v.totalInManila = [];
+                v.actualInIloilo = [];
+                v.totalInIloilo = [];
                 axios.get('/get-employees-data')
                 .then(response => { 
                     v.employees = response.data;
@@ -127,14 +130,34 @@
                             }
                         }
 
+                        //Total In Manila
+                        if(e.locations.length > 0){
+                            if(e.locations[0].name == "MANILA"){
+                                v.totalInManila.push(e);
+                            }
+                        }
+                        //Total In Iloilo
+                        if(e.locations.length > 0){
+                            if(e.locations[0].name == "ILOILO"){
+                                v.totalInIloilo.push(e);
+                            }
+                        }
+
                         //In Office
                         if(e.employee_current_location_latest){
                             v.totalInOffice.push(e);
-
-                            //Actual in BGC
                             if(e.employee_current_location_latest.rfid_controller){
+                                //Actual in BGC
                                 if(e.employee_current_location_latest.rfid_controller.location == "BGC"){
                                     v.actualInBGC.push(e);
+                                }
+                                //Actual in Manila
+                                if(e.employee_current_location_latest.rfid_controller.location == "MANILA"){
+                                    v.actualInManila.push(e);
+                                }
+                                //Actual in Iloilo
+                                if(e.employee_current_location_latest.rfid_controller.location == "ILOILO"){
+                                    v.actualInIloilo.push(e);
                                 }
                             }
                         }
@@ -167,8 +190,25 @@
                 }else{
                     return 0;
                 }
-                
-            }
+            },
+            progressManila(){
+                let  v = this;
+                if(v.actualInManila.length > 0 && v.totalInManila.length > 0){
+                    var progress = (v.actualInManila.length / v.totalInManila.length) * 100;
+                    return progress.toFixed(0);
+                }else{
+                    return 0;
+                }
+            },
+            progressIloilo(){
+                let  v = this;
+                if(v.actualInIloilo.length > 0 && v.totalInIloilo.length > 0){
+                    var progress = (v.actualInIloilo.length / v.totalInIloilo.length) * 100;
+                    return progress.toFixed(0);
+                }else{
+                    return 0;
+                }
+            },
         },
     }
 </script>
