@@ -37,8 +37,8 @@
                             <div class="col-sm-4 mt-5">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" style="cursor:pointer">
-                                            <i class="fas fa-search text-dark-50"></i>
+                                        <span class="input-group-text" style="cursor:pointer" @click="showFilter">
+                                            <i class="fas fa-filter text-dark-50"></i>
                                         </span>
                                     </div>
                                     <input type="text" class="form-control" placeholder="Search Employee" v-model="keywords">
@@ -93,7 +93,7 @@
                                         </td>
                                         <td style="vertical-align: middle;">
                                            <strong style="font-size:12px">{{employee.last_name + ', ' + employee.first_name}}</strong><br>
-                                           <span style="font-size:11px"> {{employee.position}} | {{ employee.departments.length > 0 ? employee.departments[0].name : ""}} | {{ employee.companies.length > 0 ? employee.companies[0].name : ""}}</span> <br>
+                                           <span style="font-size:11px"> {{employee.position}} | {{ employee.departments.length > 0 ? employee.departments[0].name : ""}} | {{ employee.companies.length > 0 ? employee.companies[0].name : ""}} | {{ employee.locations.length > 0 ? employee.locations[0].name : ""}}</span> <br>
                                            <span style="font-size:11px"> {{ employee.door_id_number ? employee.door_id_number + ' |' : ""  }} {{employee.rfid_64}}</span>
                                         </td>
                                         <td style="vertical-align: middle;">
@@ -139,6 +139,59 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="apply-filter-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-md modal-fixed" role="document">
+                <div class="modal-content">
+                    <div>
+                        <button type="button" class="close mt-2 mr-2" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div> 
+                    <div class="modal-header">
+                        <h2 class="col-12 modal-title text-center">Apply Filter</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Company</label>
+                                    <select class="form-control" v-model="filter.company" id="company">
+                                        <option value="">Choose Company</option>
+                                        <option v-for="(company,v) in companies" v-bind:key="v" :value="company.id"> {{ company.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Department</label>
+                                    <select class="form-control" v-model="filter.department" id="department">
+                                        <option value="">Choose Deparment</option>
+                                        <option v-for="(department,v) in departments" v-bind:key="v" :value="department.id"> {{ department.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <select class="form-control" v-model="filter.location" id="location">
+                                        <option value="">Choose Location</option>
+                                        <option v-for="(location,v) in locations" v-bind:key="v" :value="location.id"> {{ location.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning btn-md" @click="clearFilter">Clear</button>
+                        <button class="btn btn-primary btn-md" @click="getEmployees" :disabled="loading">
+                            Apply Filter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </div>
 </template>
 
@@ -154,14 +207,21 @@
                 employees : [],
                 errors : [],
                 currentPageEmployee: 0,
-                itemsPerPageEmployee: 10,
-                
+                itemsPerPageEmployee: 10, 
                 rfid_64_status : '',
                 loading : false,
-
                 doors : [],
-
                 show_favorites : false,
+
+                //Filter
+                locations:[],
+                departments:[],
+                companies:[],
+                filter : {
+                    'company' : '',
+                    'department' : '',
+                    'location' : '',
+                }
             }
         },
         created () {
@@ -169,8 +229,44 @@
             this.getRfidDoors();
             this.getEmployees();
             this.getSessionShowFavorites();
+            this.getCompanies();
+            this.getLocations();
+            this.getDepartments();
         },
         methods: {
+            clearFilter(){
+                let v = this;
+                v.filter.company = '';
+                v.filter.department = '';
+                v.filter.location = '';
+            },
+            getCompanies() {
+                let v = this;
+                v.companies = [];
+                axios.get('/companies')
+                .then(response => { 
+                    v.companies = response.data;
+                });
+            },
+            getDepartments() {
+                let v = this;
+                v.departments = [];
+                axios.get('/departments')
+                .then(response => { 
+                    v.departments = response.data;
+                });
+            },
+            getLocations() {
+                let v = this;
+                v.locations = [];
+                axios.get('/locations')
+                .then(response => { 
+                    v.locations = response.data;
+                });
+            },
+            showFilter(){
+                $('#apply-filter-modal').modal('show');
+            },
             changeDateFormat(log_time){
                 var new_log_time = moment(log_time).format('LL LTS');
                 return new_log_time;
@@ -214,7 +310,6 @@
             },
             refresh(){
                 this.getCurrentTransferAccessLogs();
-                this.getRfidDoors();
                 this.getEmployees();
             },
             getCurrentTransferAccessLogs(){
@@ -250,7 +345,7 @@
                 v.loading = true;
                 v.rfid_64_status = '';
                 v.employees = [];
-                axios.get('/get-employees-data')
+                axios.get('/get-employees-data?company='+v.filter.company+'&department='+v.filter.department+'&location='+v.filter.location)
                 .then(response => { 
                     v.employees = response.data;
                     v.loading = false;

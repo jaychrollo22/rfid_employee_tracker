@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Employee;
 use App\EmployeeCurrentAreaLocationLog;
+use App\Location;
+use App\Department;
+use App\Company;
 use Auth;
 
 class EmployeeController extends Controller
@@ -29,11 +32,31 @@ class EmployeeController extends Controller
     }
 
     public function getEmployeesData(Request $request){
+        
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+        $location = isset($request->location) ? $request->location : "";
+
         return $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','door_id_number')
                                         ->with('companies','departments','locations','employee_current_location_latest.rfid_controller')
                                         ->with(array('user_favorite'=>function($q){
                                             $q->where('auth_user_id',Auth::user()->id);
                                         }))
+                                        ->when(!empty($company),function($q) use($company){
+                                            $q->whereHas('companies', function ($w) use($company)  {
+                                                $w->where('id', '=', $company);
+                                            });
+                                        })
+                                        ->when(!empty($department),function($q) use($department){
+                                            $q->whereHas('departments', function ($w) use($department)  {
+                                                $w->where('id', '=', $department);
+                                            });
+                                        })
+                                        ->when(!empty($location),function($q) use($location){
+                                            $q->whereHas('locations', function ($w) use($location)  {
+                                                $w->where('id', '=', $location);
+                                            });
+                                        })
                                         ->where('status','Active')
                                         ->orderBy('last_name','ASC')
                                         ->get();
@@ -68,5 +91,17 @@ class EmployeeController extends Controller
                                 }))
                                 ->where('id',$employee_id)
                                 ->first();
+    }
+
+    public function locations(){
+        return Location::orderBy('name','ASC')->get();
+    }
+
+    public function departments(){
+        return Department::orderBy('name','ASC')->get();
+    }
+    
+    public function companies(){
+        return Company::orderBy('name','ASC')->where('status','Active')->get();
     }
 }

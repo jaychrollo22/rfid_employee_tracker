@@ -28,6 +28,11 @@ Route::get('/get-employees-data', 'EmployeeController@getEmployeesData');
 Route::get('/view-history-logs', 'EmployeeController@viewHistoryLogs');
 Route::get('/view-history-logs-data', 'EmployeeController@viewHistoryLogsData');
 
+//Filters
+Route::get('/locations', 'EmployeeController@locations');
+Route::get('/departments', 'EmployeeController@departments');
+Route::get('/companies', 'EmployeeController@companies');
+
 //Users
 Route::get('/users', 'UsersController@index')->name('users');
 Route::get('/get-users-data', 'UsersController@getUsersData');

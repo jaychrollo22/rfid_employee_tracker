@@ -79,6 +79,11 @@
     <div class="modal fade" id="view-data-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-fixed" style="width:100%!important;" role="document">
             <div class="modal-content">
+                <div>
+                    <button type="button" class="close mt-2 mr-2" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> 
                 <div class="modal-header">
                     <h4 class="modal-title">View Employees</h4>
                 </div>
@@ -162,6 +167,8 @@
             </div>
         </div>
     </div>
+
+    
 
 </div>
 </template>
