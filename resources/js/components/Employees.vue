@@ -124,13 +124,10 @@
                         </div>
 
                         <div class="row col-md-12" v-if="filteredEmployeeQueues.length">
-                            <div class="col-12">
+                            <div class="text-right">
                                 <button :disabled="!showPreviousLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee - 1)"> Previous </button>
                                     <span class="text-dark">Page {{ currentPageEmployee + 1 }} of {{ totalPagesEmployee }}</span>
                                 <button :disabled="!showNextLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee + 1)"> Next </button>
-                            </div>
-                            <div class="col-12 text-right">
-                                <span>Total : {{ filteredEmployees.length }} </span><br>
                             </div>
                         </div>
 
@@ -350,6 +347,7 @@
                 .then(response => { 
                     v.employees = response.data;
                     v.loading = false;
+                    $('#apply-filter-modal').modal('hide');
                 })
                 .catch(error => { 
                     v.errors = error.response.data.error;

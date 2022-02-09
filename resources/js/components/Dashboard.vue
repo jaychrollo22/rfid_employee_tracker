@@ -76,7 +76,7 @@
     </div>
 
     <!-- Show Employees -->
-    <div class="modal fade" id="view-data-modal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="view-data-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-fixed" style="width:100%!important;" role="document">
             <div class="modal-content">
                 <div>
@@ -163,13 +163,10 @@
                         </div>
                     </div>
                     <div class="row col-md-12" v-if="filteredEmployeeQueues.length">
-                        <div class="col-12">
+                        <div class="float-right">
                             <button :disabled="!showPreviousLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee - 1)"> Previous </button>
                                 <span class="text-dark">Page {{ currentPageEmployee + 1 }} of {{ totalPagesEmployee }}</span>
                             <button :disabled="!showNextLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee + 1)"> Next </button>
-                        </div>
-                        <div class="col-12 text-right">
-                            <span>Total : {{ filteredEmployees.length }} </span><br>
                         </div>
                     </div>
                 </div>
