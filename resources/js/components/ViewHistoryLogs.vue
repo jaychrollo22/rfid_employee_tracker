@@ -140,12 +140,15 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row col-md-12" v-if="filteredLogQueues.length">
-                            <div class="col-12">
-                                <button :disabled="!showPreviousLinkLog()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLog(currentPageLog - 1)"> Previous </button>
-                                    <span class="text-dark">Page {{ currentPageLog + 1 }} of {{ totalPagesLog }}</span>
-                                <button :disabled="!showNextLinkLog()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLog(currentPageLog + 1)"> Next </button>
+                        <div class="row" v-if="filteredLogQueues.length">
+                            <div class="col-md-12">
+                                <span class="float-right">
+                                    <button :disabled="!showPreviousLinkLog()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLog(currentPageLog - 1)"> Previous </button>
+                                        <span class="text-dark">Page {{ currentPageLog + 1 }} of {{ totalPagesLog }}</span>
+                                    <button :disabled="!showNextLinkLog()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLog(currentPageLog + 1)"> Next </button>
+                                </span>
                             </div>
+                           
                         </div>
                     </div>
                 </div>

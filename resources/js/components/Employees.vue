@@ -123,11 +123,13 @@
                             </table>
                         </div>
 
-                        <div class="row col-md-12" v-if="filteredEmployeeQueues.length">
-                            <div class="text-right">
-                                <button :disabled="!showPreviousLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee - 1)"> Previous </button>
-                                    <span class="text-dark">Page {{ currentPageEmployee + 1 }} of {{ totalPagesEmployee }}</span>
-                                <button :disabled="!showNextLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee + 1)"> Next </button>
+                        <div class="row" v-if="filteredEmployeeQueues.length">
+                            <div class="col-md-12">
+                                <span class="float-right">
+                                    <button :disabled="!showPreviousLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee - 1)"> Previous </button>
+                                        <span class="text-dark">Page {{ currentPageEmployee + 1 }} of {{ totalPagesEmployee }}</span>
+                                    <button :disabled="!showNextLinkEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageEmployee(currentPageEmployee + 1)"> Next </button>
+                                </span>
                             </div>
                         </div>
 
