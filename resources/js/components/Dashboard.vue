@@ -26,7 +26,7 @@
                                     <center>
                                         <vue-ellipse-progress :progress="progressTotalInOffice" :legendValue="totalInOffice.length" fontSize="2.5rem" color="#003494">
                                             <span slot="legend-value"> </span>
-                                            <p slot="legend-caption" @click="viewSelectedEmployees(totalInOffice)" style="cursor:pointer;"><strong>Total In Office</strong></p>
+                                            <p slot="legend-caption" @click="viewSelectedEmployees(totalInOffice,'Total In Office')" style="cursor:pointer;"><strong>Total In Office</strong></p>
                                         </vue-ellipse-progress>
                                     </center>
                                 </div>
@@ -43,7 +43,7 @@
                                             <center>
                                                 <vue-ellipse-progress :progress="progressBgc" :legendValue="actualInBGC.length" color="#00713A" :size="150">
                                                     <span slot="legend-value"> / {{ totalInBGC.length }}</span>
-                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInBGC)" style="cursor:pointer;"><strong>BGC</strong></p>
+                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInBGC,'BGC')" style="cursor:pointer;"><strong>BGC</strong></p>
                                                 </vue-ellipse-progress>
                                             </center>
                                             
@@ -52,7 +52,7 @@
                                             <center>
                                                 <vue-ellipse-progress :progress="progressManila" :legendValue="actualInManila.length" color="#E2231A" :size="150">
                                                     <span slot="legend-value"> / {{ totalInManila.length }}</span>
-                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInManila)" style="cursor:pointer;"><strong>MANILA</strong></p>
+                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInManila,'MANILA')" style="cursor:pointer;"><strong>MANILA</strong></p>
                                                 </vue-ellipse-progress>
                                             </center>
                                         </div>
@@ -60,7 +60,7 @@
                                             <center>
                                                 <vue-ellipse-progress :progress="progressIloilo" :legendValue="actualInIloilo.length" color="#FFD840" :size="150">
                                                     <span slot="legend-value"> / {{ totalInIloilo.length }}</span>
-                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInIloilo)" style="cursor:pointer;"><strong>ILOILO</strong></p>
+                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInIloilo,'ILOILO')" style="cursor:pointer;"><strong>ILOILO</strong></p>
                                                 </vue-ellipse-progress>
                                             </center>
                                         </div>
@@ -85,7 +85,7 @@
                     </button>
                 </div> 
                 <div class="modal-header">
-                    <h4 class="modal-title">View Employees</h4>
+                    <h4>{{modalTitle}}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -95,7 +95,19 @@
                                 <input type="text" class="form-control" placeholder="Input here..." v-model="keywords">
                             </div>
                         </div>
-
+                        <div class="col-md-12">
+                            <div class="float-right mt-3">
+                                Show
+                                <select v-model="itemsPerPageEmployee">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                Total : {{ filteredEmployees.length }}
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-checkable" id="kt_datatable">
                                 <thead>
@@ -161,9 +173,6 @@
                         </div>
                     </div>
                 </div>
-                 <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-default waves-effect " data-dismiss="modal" @click="closeViewContent">Close</button> -->
-                </div>
             </div>
         </div>
     </div>
@@ -197,6 +206,8 @@
                 currentPageEmployee: 0,
                 itemsPerPageEmployee: 10,
                 selected_employees : [],
+
+                modalTitle : ''
             }
         },
         created () {
@@ -251,8 +262,9 @@
                 var new_log_time = moment(log_time).format('LL LTS');
                 return new_log_time;
             },
-            viewSelectedEmployees(selected_employees){
+            viewSelectedEmployees(selected_employees,modalTitle){
                 this.selected_employees = selected_employees;
+                this.modalTitle = modalTitle;
                 $('#view-data-modal').modal('show');
             },
             getEmployees() {
@@ -406,5 +418,8 @@
 <style lang="scss" scoped>
     .modal-fixed {
         max-width: 1200px!important;
+    }
+    #view-data-modal{
+        padding-left: 0px;
     }
 </style>
