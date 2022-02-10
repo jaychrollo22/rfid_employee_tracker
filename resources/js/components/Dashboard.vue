@@ -71,18 +71,11 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="card card-custom gutter-b">
-                            <!--begin::Header-->
-                            <div class="card-header border-0 py-5">
+                            <div class="card-body">
                                 <h3 class="card-title align-items-start flex-column">
                                     <span class="card-label font-weight-bolder text-dark">Last Scanned Logs</span>
-                                    <!-- <span class="text-muted mt-3 font-weight-bold font-size-sm">More than 400+ new members</span> -->
                                 </h3>
-                                <div class="card-toolbar">
-                                </div>
-                            </div>
-                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="float-right">

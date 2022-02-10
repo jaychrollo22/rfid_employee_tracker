@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\AccessLog;
+use App\EmployeeCurrentAreaLocation;
 use App\EmployeeCurrentAreaLocationLog;
 
 use Carbon\Carbon;
@@ -63,9 +64,18 @@ class AccessLogController extends Controller
                                                                             ->where('local_time',$local_time)
                                                                             ->first();
 
+                    $employee_current_location = EmployeeCurrentAreaLocation::where('card_code',$card_code)->first();
+
                     if(empty($validate_access_log)){
                         if($save_access_log = EmployeeCurrentAreaLocationLog::create($data)){
                             AccessLog::where('LogID',$item->LogID)->delete();
+
+                            if(empty($employee_current_location)){
+                                EmployeeCurrentAreaLocation::create($data);
+                            }else{
+                                $employee_current_location->update($data);
+                            }
+                            
                             DB::commit();
                             $x++;
                         }
