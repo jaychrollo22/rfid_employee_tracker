@@ -78,13 +78,16 @@
                                             <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{ employee.companies ? employee.companies[0].name : ""}}</a>
                                         </div>
                                     </div>
-                                    <div v-if="employee_current_location_latest">
-                                        <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(employee_current_location_latest) }}</strong> <br>
-                                        <small style="font-size:11px">{{ changeDateFormat(employee_current_location_latest.local_time) }}</small>
+                                    <div class="row col-md-12">
+                                         <div v-if="employee_current_location_latest">
+                                            <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(employee_current_location_latest) }}</strong> <br>
+                                            <small style="font-size:11px">{{ changeDateFormat(employee_current_location_latest.local_time) }}</small>
+                                        </div>
+                                        <div v-else>
+                                            <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Detected</span>
+                                        </div>
                                     </div>
-                                    <div v-else>
-                                        <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Detected</span>
-                                    </div>
+                                   
                                 </div>
                             </div>
                         </div>

@@ -53,6 +53,19 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="float-right">
+                            Show
+                            <select v-model="itemsPerPageController">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            Total : {{ controllers.length }}
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-checkable" id="kt_datatable">
                                 <thead>
