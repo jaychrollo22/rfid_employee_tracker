@@ -71,8 +71,8 @@ class LoginController extends Controller
                 }
             }else{
                 if($employee->user->user_role){
-                    if($employee->user->user_role->role == "Administrator" || $employee->user->user_role->role == "President" || $employee->user->user_role->role == "Manager"){
-                        $role = $employee->user->user_role->role;
+                    if($employee->user->user_role->role == "Administrator" || $employee->user->user_role->role == "President"){
+                        $role = "Administrator";
                     }else{
                         $role = "Manager";
                     }
@@ -103,14 +103,12 @@ class LoginController extends Controller
                     
                 }
             }
-
             session([
                 'user' => $employee,
                 'role' => $role,
                 'employee_ids' => $employee_ids,
                 'employee_rfids' => $employee_rfids,
             ]);
-
         }else{
             session([
                 'user' => $employee,

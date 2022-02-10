@@ -28,42 +28,14 @@ class ActivityLogsController extends Controller
      */
 
      public function index(){
-        $employee = Employee::select('id','user_id','id_number','first_name','last_name','middle_name','position','level')
-                            ->with('user.user_role')
-                            ->where('user_id',Auth::user()->id)
-                            ->first();
-
-        //Validate Role
-        $role = 'User';
-        if(isset($employee->level)){
-            if($employee->level == "RANK&FILE"){
-                if($employee->user->user_role){
-                    if($employee->user->user_role->role == "Administrator"){
-                        $role = "Administrator";
-                    }else{
-                        $role = "User";
-                    }
-                }
-            }else{
-                if($employee->user->user_role){
-                    if($employee->user->user_role->role == "Administrator" || $employee->user->user_role->role == "President"){
-                        $role = $employee->user->user_role->role;
-                    }else{
-                        $role = "Manager";
-                    }
-                }else{
-                    $role = "Manager";
-                }
-            } 
+        if(session('role') == "Administrator"){
+            session([
+                'title' => 'Activity Logs',
+            ]);
+            return view('activity_logs.index');
+        }else{
+            return redirect('/home');
         }
-     
-        session([
-            'title' => 'Activity Logs',
-            'user' => $employee,
-            'role' => $role
-        ]);
-
-        return view('activity_logs.index');
      }
 
      public function activityLogs(Request $request){

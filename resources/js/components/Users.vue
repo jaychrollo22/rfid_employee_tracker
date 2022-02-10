@@ -152,7 +152,7 @@
         data() {
             return {
                 keywords: '',
-                filterRole : '',
+                filterRole : 'Administrator',
                 user : [],
                 users : [],
                 errors : [],

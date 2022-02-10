@@ -23,10 +23,14 @@ class RfidSettingsController extends Controller
     }
 
     public function rfidSettingsControllers(){
-        session([
-            'title' => 'RFID Controllers',
-        ]);
-        return view('rfid_controllers.index');
+        if(session('role') == "Administrator"){
+            session([
+                'title' => 'RFID Controllers',
+            ]);
+            return view('rfid_controllers.index'); 
+        }else{
+            return redirect('/home');
+        }
     }
 
     public function getRfidSettingsControllersData(Request $request){
@@ -96,10 +100,14 @@ class RfidSettingsController extends Controller
     //RFID DOORS------------------------------------------------------------------------------------
 
     public function rfidSettingsDoors(){
-        session([
-            'title' => 'RFID Doors',
-        ]);
-        return view('rfid_doors.index');
+        if(session('role') == "Administrator"){
+            session([
+                'title' => 'RFID Doors',
+            ]);
+            return view('rfid_doors.index');
+        }else{
+            return redirect('/home');
+        }
     }
 
     public function getRfidSettingsDoorsData(Request $request){
