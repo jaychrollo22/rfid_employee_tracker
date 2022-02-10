@@ -99,7 +99,7 @@
                                         </td>
                                         <td style="vertical-align: middle;">
                                             <div v-if="employee.employee_current_location_latest">
-                                                <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
+                                                <strong style="font-size:12px" :class="locationColor(employee.employee_current_location_latest)">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
                                                 <strong style="font-size:11px">{{ changeDateFormat(employee.employee_current_location_latest.local_time)}}</strong>
                                             </div>
                                             <div v-else>
@@ -324,6 +324,28 @@
                 });
                 if(location.length > 0){
                     return location[0].door_name;
+                }
+            },
+            locationColor(current_location){
+                let v = this;
+                var location = Object.values(v.doors).filter(door => {
+                    if(current_location.controller_id == door.controller_id && current_location.door_id == door.door_id){
+                        return door;
+                    }
+                });
+                if(location.length > 0){
+                    if(location[0].rfid_controller){
+                        if(location[0].rfid_controller.location == 'BGC'){
+                            return 'text-success';
+                        }
+                        else if(location[0].rfid_controller.location == 'MANILA'){
+                            return 'text-primary';
+                        }else {
+                            return 'text-default';
+                        }
+                    }else{
+                        return 'text-default';
+                    }
                 }
             },
             getRfidDoors() {

@@ -19,6 +19,6 @@ class RfidDoor extends Model implements AuditableContract
 
     public function rfid_controller()
     {
-        return $this->belongsTo('App\RfidController','controller_id','controller_id')->select('id','controller_id','controller_name');
+        return $this->belongsTo('App\RfidController','controller_id','controller_id')->select('id','controller_id','controller_name','location');
     }
 }

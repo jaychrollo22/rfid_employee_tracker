@@ -27,7 +27,7 @@
                             <div class="card-body">
                                 <div class="text-enter">
                                     <center>
-                                        <vue-ellipse-progress :progress="progressTotalInOffice" :legendValue="totalInOffice.length" fontSize="2.5rem" color="#003494">
+                                        <vue-ellipse-progress :progress="progressTotalInOffice" :legendValue="totalInOffice.length" fontSize="2.5rem" color="#E2231A">
                                             <span slot="legend-value"> </span>
                                             <p slot="legend-caption" @click="viewSelectedEmployees(totalInOffice,'Total In Office')" style="cursor:pointer;"><strong>Total In Office</strong></p>
                                         </vue-ellipse-progress>
@@ -40,9 +40,9 @@
                                 <div class="text-enter">
                                     <center>
                                         <vue-ellipse-progress :progress="progressBgc" :legendValue="actualInBGC.length" color="#00713A" :size="150">
-                                                    <span slot="legend-value"> / {{ totalInBGC.length }}</span>
-                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInBGC,'BGC')" style="cursor:pointer;"><strong>BGC</strong></p>
-                                                </vue-ellipse-progress>
+                                            <span slot="legend-value"> / {{ totalInBGC.length }}</span>
+                                            <p slot="legend-caption" @click="viewSelectedEmployees(actualInBGC,'BGC')" style="cursor:pointer;"><strong>BGC</strong></p>
+                                        </vue-ellipse-progress>
                                     </center>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
                             <div class="card-body">
                                 <div class="text-enter">
                                     <center>
-                                        <vue-ellipse-progress :progress="progressManila" :legendValue="actualInManila.length" color="#E2231A" :size="150">
+                                        <vue-ellipse-progress :progress="progressManila" :legendValue="actualInManila.length" color="#003494" :size="150">
                                             <span slot="legend-value"> / {{ totalInManila.length }}</span>
                                             <p slot="legend-caption" @click="viewSelectedEmployees(actualInManila,'MANILA')" style="cursor:pointer;"><strong>MANILA</strong></p>
                                         </vue-ellipse-progress>
@@ -111,7 +111,7 @@
                                                     <span style="font-size:11px"> {{ item.employee.door_id_number ? item.employee.door_id_number + ' |' : ""  }} {{item.employee.rfid_64}}</span>
                                                 </td>
                                                 <td style="vertical-align: middle;">
-                                                    <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(item) }}</strong> <br>
+                                                    <strong style="font-size:12px" :class="locationColor(item)">{{ getCurrentLocation(item) }}</strong> <br>
                                                     <strong style="font-size:11px">{{ changeDateFormat(item.local_time)}}</strong>
                                                 </td>
                                                 <td align="center" style="vertical-align: middle;">
@@ -203,7 +203,7 @@
                                         </td>
                                         <td style="vertical-align: middle;">
                                             <div v-if="employee.employee_current_location_latest">
-                                                <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
+                                                <strong style="font-size:12px" :class="locationColor(employee.employee_current_location_latest)">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
                                                 <strong style="font-size:11px">{{ changeDateFormat(employee.employee_current_location_latest.local_time)}}</strong>
                                             </div>
                                             <div v-else>
@@ -324,6 +324,28 @@
                 });
                 if(location.length > 0){
                     return location[0].door_name;
+                }
+            },
+            locationColor(current_location){
+                let v = this;
+                var location = Object.values(v.doors).filter(door => {
+                    if(current_location.controller_id == door.controller_id && current_location.door_id == door.door_id){
+                        return door;
+                    }
+                });
+                if(location.length > 0){
+                    if(location[0].rfid_controller){
+                        if(location[0].rfid_controller.location == 'BGC'){
+                            return 'text-success';
+                        }
+                        else if(location[0].rfid_controller.location == 'MANILA'){
+                            return 'text-primary';
+                        }else {
+                            return 'text-default';
+                        }
+                    }else{
+                        return 'text-default';
+                    }
                 }
             },
             getRfidDoors() {
