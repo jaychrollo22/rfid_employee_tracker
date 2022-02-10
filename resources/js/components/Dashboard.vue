@@ -35,46 +35,49 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-xl-8">
                         <div class="card card-custom gutter-b">
                             <div class="card-body">
                                 <div class="text-enter">
-                                    <div class="row">
-                                        <div class="col-sm-4 mt-5">
-                                            <center>
-                                                <vue-ellipse-progress :progress="progressBgc" :legendValue="actualInBGC.length" color="#00713A" :size="150">
+                                    <center>
+                                        <vue-ellipse-progress :progress="progressBgc" :legendValue="actualInBGC.length" color="#00713A" :size="150">
                                                     <span slot="legend-value"> / {{ totalInBGC.length }}</span>
                                                     <p slot="legend-caption" @click="viewSelectedEmployees(actualInBGC,'BGC')" style="cursor:pointer;"><strong>BGC</strong></p>
                                                 </vue-ellipse-progress>
-                                            </center>
-                                            
-                                        </div>
-                                        <div class="col-sm-4 mt-5">
-                                            <center>
-                                                <vue-ellipse-progress :progress="progressManila" :legendValue="actualInManila.length" color="#E2231A" :size="150">
-                                                    <span slot="legend-value"> / {{ totalInManila.length }}</span>
-                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInManila,'MANILA')" style="cursor:pointer;"><strong>MANILA</strong></p>
-                                                </vue-ellipse-progress>
-                                            </center>
-                                        </div>
-                                        <div class="col-sm-4 mt-5">
-                                            <center>
-                                                <vue-ellipse-progress :progress="progressIloilo" :legendValue="actualInIloilo.length" color="#FFD840" :size="150">
-                                                    <span slot="legend-value"> / {{ totalInIloilo.length }}</span>
-                                                    <p slot="legend-caption" @click="viewSelectedEmployees(actualInIloilo,'ILOILO')" style="cursor:pointer;"><strong>ILOILO</strong></p>
-                                                </vue-ellipse-progress>
-                                            </center>
-                                        </div>
-                                    </div>
+                                    </center>
                                 </div>
                             </div>
                         </div>
                         <div class="card card-custom gutter-b">
                             <div class="card-body">
+                                <div class="text-enter">
+                                    <center>
+                                        <vue-ellipse-progress :progress="progressManila" :legendValue="actualInManila.length" color="#E2231A" :size="150">
+                                            <span slot="legend-value"> / {{ totalInManila.length }}</span>
+                                            <p slot="legend-caption" @click="viewSelectedEmployees(actualInManila,'MANILA')" style="cursor:pointer;"><strong>MANILA</strong></p>
+                                        </vue-ellipse-progress>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-custom gutter-b">
+                            <div class="card-body">
+                                <div class="text-enter">
+                                    <center>
+                                        <vue-ellipse-progress :progress="progressIloilo" :legendValue="actualInIloilo.length" color="#FFD840" :size="150">
+                                            <span slot="legend-value"> / {{ totalInIloilo.length }}</span>
+                                            <p slot="legend-caption" @click="viewSelectedEmployees(actualInIloilo,'ILOILO')" style="cursor:pointer;"><strong>ILOILO</strong></p>
+                                        </vue-ellipse-progress>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-8">
+                        <div class="card card-custom gutter-b">
+                            <div class="card-body">
                                 <h3 class="card-title align-items-start flex-column">
-                                    <span class="card-label font-weight-bolder text-dark">Last Scanned Logs</span>
+                                    <span class="card-label font-weight-bolder text-dark">Last Scanned Employees</span>
                                 </h3>
                                 <div class="row">
                                     <div class="col-md-12">
