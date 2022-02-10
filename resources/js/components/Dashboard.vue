@@ -1,5 +1,5 @@
 <template>
-<div>
+<div @mousemove="mouseMove">
     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
         <div class="subheader py-2 py-lg-12 subheader-transparent" id="kt_subheader">
@@ -277,6 +277,8 @@
                 last_scanned_employees : [],
                 currentPageLastScannedEmployee: 0,
                 itemsPerPageLastScannedEmployee: 10,
+
+                timer : '',
             }
         },
         created () {
@@ -286,12 +288,18 @@
             this.getLastScannedEmployees();
         },
         methods: {
+            mouseMove(event) {
+                this.timer = '';
+                this.timer = setInterval(this.refresh, 300000);
+            },
             getLastScannedEmployees(){
                 let v = this;
                 v.last_scanned_employees = [];
                 axios.get('/last-scanned-employees')
                 .then(response => { 
                     v.last_scanned_employees = response.data;
+
+                    this.timer = setInterval(this.refresh, 300000)
                 })
             },
             refresh(){
