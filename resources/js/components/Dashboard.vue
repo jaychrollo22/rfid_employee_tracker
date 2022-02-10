@@ -12,6 +12,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex align-items-center">
+                    <a href="#" @click="refresh" class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2">Refresh</a>
+                </div>
             </div>
         </div>
 
@@ -68,8 +71,72 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="card card-custom gutter-b">
+                            <!--begin::Header-->
+                            <div class="card-header border-0 py-5">
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label font-weight-bolder text-dark">Last Scanned Logs</span>
+                                    <!-- <span class="text-muted mt-3 font-weight-bold font-size-sm">More than 400+ new members</span> -->
+                                </h3>
+                                <div class="card-toolbar">
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="float-right">
+                                            Show
+                                            <select v-model="itemsPerPageLastScannedEmployee">
+                                                <option value="5">5</option>
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            Total : {{ filteredLastScannedEmployees.length }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-checkable" id="kt_datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>Employee</th>
+                                                <th>Current Location</th>
+                                                <th class="text-center">Logs</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, i) in filteredLastScannedEmployeeQueues" :key="i" >
+                                                <td>
+                                                    <strong style="font-size:12px">{{item.employee.last_name + ', ' + item.employee.first_name}}</strong><br>
+                                                    <span style="font-size:11px"> {{item.employee.position}} | {{ item.employee.departments.length > 0 ? item.employee.departments[0].name : ""}}</span> <br>
+                                                    <span style="font-size:11px"> {{ item.employee.door_id_number ? item.employee.door_id_number + ' |' : ""  }} {{item.employee.rfid_64}}</span>
+                                                </td>
+                                                <td style="vertical-align: middle;">
+                                                    <strong style="font-size:12px" class="text-success">{{ getCurrentLocation(item) }}</strong> <br>
+                                                    <strong style="font-size:11px">{{ changeDateFormat(item.local_time)}}</strong>
+                                                </td>
+                                                <td align="center" style="vertical-align: middle;">
+                                                    <a :href="'/view-history-logs?id='+item.employee.id+'&v=' + Math.random()" target="_blank"><i class="fas fa-street-view text-warning" style="cursor:pointer;" title="View Logs"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                 <div class="row" v-if="filteredLastScannedEmployeeQueues.length">
+                                    <div class="col-md-12">                        
+                                        <span class="float-right">
+                                            <button :disabled="!showPreviousLinkLastScannedEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLastScannedEmployee(currentPageLastScannedEmployee - 1)"> Previous </button>
+                                                <span class="text-dark">Page {{ currentPageLastScannedEmployee + 1 }} of {{ totalPagesLastScannedEmployee }}</span>
+                                            <button :disabled="!showNextLinkLastScannedEmployee()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLastScannedEmployee(currentPageLastScannedEmployee + 1)"> Next </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -204,15 +271,34 @@
                 itemsPerPageEmployee: 10,
                 selected_employees : [],
 
-                modalTitle : ''
+                modalTitle : '',
+
+                last_scanned_employees : [],
+                currentPageLastScannedEmployee: 0,
+                itemsPerPageLastScannedEmployee: 10,
             }
         },
         created () {
             this.getCurrentTransferAccessLogs();
             this.getRfidDoors();
             this.getEmployees();
+            this.getLastScannedEmployees();
         },
         methods: {
+            getLastScannedEmployees(){
+                let v = this;
+                v.last_scanned_employees = [];
+                axios.get('/last-scanned-employees')
+                .then(response => { 
+                    v.last_scanned_employees = response.data;
+                })
+            },
+            refresh(){
+                this.getCurrentTransferAccessLogs();
+                this.getRfidDoors();
+                this.getEmployees();
+                this.getLastScannedEmployees();
+            },
             saveFavorite(employee){
                 let v = this;
                 if(employee){
@@ -340,6 +426,18 @@
             showNextLinkEmployee() {
                 return this.currentPageEmployee == (this.totalPagesEmployee - 1) ? false : true;
             },
+            setPageLastScannedEmployee(pageNumber) {
+                this.currentPageLastScannedEmployee = pageNumber;
+            },
+            resetStartRowLastScannedEmployee() {
+                this.currentPageLastScannedEmployee = 0;
+            },
+            showPreviousLinkLastScannedEmployee() {
+                return this.currentPageLastScannedEmployee == 0 ? false : true;
+            },
+            showNextLinkLastScannedEmployee() {
+                return this.currentPageLastScannedEmployee == (this.totalPagesLastScannedEmployee - 1) ? false : true;
+            },
         },
         computed: {
             filteredEmployees(){
@@ -367,6 +465,37 @@
 
                 if(this.currentPageEmployee == -1) {
                     this.currentPageEmployee = 0;
+                }
+
+                return queues_array;
+            },
+            filteredLastScannedEmployees(){
+                let v = this;
+                if(v.last_scanned_employees){
+                    return Object.values(v.last_scanned_employees).filter(item => {
+                        if(item.employee){
+                            var full_name = item.employee.first_name + ' ' + item.employee.last_name;
+                            return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || item.employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || item.employee.last_name.toLowerCase().includes(this.keywords.toLowerCase())  
+                        }  
+                    });
+                }else{
+                    return [];
+                }
+               
+            },
+            totalPagesLastScannedEmployee() {
+                return Math.ceil(Object.values(this.filteredLastScannedEmployees).length / Number(this.itemsPerPageLastScannedEmployee))
+            },
+            filteredLastScannedEmployeeQueues() {
+                var index = this.currentPageLastScannedEmployee * Number(this.itemsPerPageLastScannedEmployee);
+                var queues_array = this.filteredLastScannedEmployees.slice(index, index + Number(this.itemsPerPageLastScannedEmployee));
+
+                if(this.currentPageLastScannedEmployee >= this.totalPagesLastScannedEmployee) {
+                    this.currentPageLastScannedEmployee = this.totalPagesLastScannedEmployee - 1
+                }
+
+                if(this.currentPageLastScannedEmployee == -1) {
+                    this.currentPageLastScannedEmployee = 0;
                 }
 
                 return queues_array;

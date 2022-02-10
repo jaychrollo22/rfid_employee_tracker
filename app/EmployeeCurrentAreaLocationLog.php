@@ -20,4 +20,8 @@ class EmployeeCurrentAreaLocationLog extends Model
     {
         return $this->belongsTo('App\RfidController','controller_id','controller_id')->select('id','controller_id','controller_name','location');
     }
+
+    public function employee(){
+        return $this->belongsTo('App\Employee','card_code','rfid_64')->select('id','user_id','first_name','last_name','position','door_id_number','rfid_64');
+    }
 }

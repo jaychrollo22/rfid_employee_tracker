@@ -20,6 +20,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/last-scanned-employees', 'HomeController@lastScannedEmployees');
 
 //Employees
 Route::get('/employees', 'EmployeeController@index')->name('employees');
