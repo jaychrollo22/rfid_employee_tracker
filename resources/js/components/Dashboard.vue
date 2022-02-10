@@ -21,20 +21,7 @@
         <div class="d-flex flex-column-fluid">
             <div class="container">
                 <div class="row">
-
-                    <div class="col-xl-4">
-                        <div class="card card-custom gutter-b wave wave-animate-slow wave-danger">
-                            <div class="card-body">
-                                <div class="text-enter">
-                                    <center>
-                                        <vue-ellipse-progress :progress="progressTotalInOffice" :legendValue="totalInOffice.length" fontSize="2.5rem" color="#E2231A">
-                                            <span slot="legend-value"> </span>
-                                            <p slot="legend-caption" @click="viewSelectedEmployees(totalInOffice,'Total In Office')" style="cursor:pointer;"><strong>Total In Office</strong></p>
-                                        </vue-ellipse-progress>
-                                    </center>
-                                </div>
-                            </div>
-                        </div>
+                     <div class="col-xl-4">
                         <div class="card card-custom gutter-b wave wave-animate-slow wave-success">
                             <div class="card-body">
                                 <div class="text-enter">
@@ -47,6 +34,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                     <div class="col-xl-4">
                         <div class="card card-custom gutter-b wave wave-animate-slow wave-primary">
                             <div class="card-body">
                                 <div class="text-enter">
@@ -59,6 +48,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                     <div class="col-xl-4">
                         <div class="card card-custom gutter-b wave wave-animate-slow wave-warning">
                             <div class="card-body">
                                 <div class="text-enter">
@@ -66,6 +57,20 @@
                                         <vue-ellipse-progress :progress="progressIloilo" :legendValue="actualInIloilo.length" color="#FFD840">
                                             <span slot="legend-value"> / {{ totalInIloilo.length }}</span>
                                             <p slot="legend-caption" @click="viewSelectedEmployees(actualInIloilo,'ILOILO')" style="cursor:pointer;"><strong>ILOILO</strong></p>
+                                        </vue-ellipse-progress>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card card-custom gutter-b wave wave-animate-slow wave-danger">
+                            <div class="card-body">
+                                <div class="text-enter">
+                                    <center>
+                                        <vue-ellipse-progress :progress="progressTotalInOffice" :legendValue="totalInOffice.length" fontSize="2.5rem" color="#E2231A">
+                                            <span slot="legend-value"> </span>
+                                            <p slot="legend-caption" @click="viewSelectedEmployees(totalInOffice,'Total In Office')" style="cursor:pointer;"><strong>Total In Office</strong></p>
                                         </vue-ellipse-progress>
                                     </center>
                                 </div>
