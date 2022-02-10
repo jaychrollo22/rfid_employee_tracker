@@ -37,7 +37,9 @@ class EmployeeController extends Controller
         $department = isset($request->department) ? $request->department : "";
         $location = isset($request->location) ? $request->location : "";
 
-        return $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','door_id_number')
+        $employee_ids = session('employee_ids');
+        if(session('role') == "Manager" || session('role') == "Administrator"){
+            return $employee = Employee::select('id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','door_id_number')
                                         ->with('companies','departments','locations','employee_current_location_latest.rfid_controller')
                                         ->with(array('user_favorite'=>function($q){
                                             $q->where('auth_user_id',Auth::user()->id);
@@ -57,9 +59,16 @@ class EmployeeController extends Controller
                                                 $w->where('id', '=', $location);
                                             });
                                         })
+                                        ->when(session('role') == "Manager",function($q) use($location,$employee_ids){
+                                            $q->whereIn('id',$employee_ids);
+                                        })
                                         ->where('status','Active')
                                         ->orderBy('last_name','ASC')
                                         ->get();
+
+        }
+        
+
     }   
 
     public function viewHistoryLogs(Request $request){

@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use App\Employee;
 use App\UserLog;
+use App\AssignHead;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 class LoginController extends Controller
@@ -80,9 +81,43 @@ class LoginController extends Controller
                 }
             } 
         }
-        session([
-            'user' => $employee,
-            'role' => $role
-        ]);
+
+        $employee_ids = [];
+        $employee_rfids = [];
+        if($role == "Manager"){
+            $first_level = AssignHead::with('employee_info')
+                                            ->whereHas('employee_info',function($q){
+                                                $q->where('status','Active');
+                                            })
+                                            ->where('employee_head_id',$employee->id)
+                                            ->get();
+            if($first_level){
+                foreach($first_level as $under)
+                {
+                    if (!in_array($under->employee_id, $employee_ids)){
+                        array_push($employee_ids , $under->employee_id);
+                    }
+                    if (!in_array($under->employee_info->rfid_64, $employee_rfids) && $under->employee_info->rfid_64){
+                        array_push($employee_rfids , $under->employee_info->rfid_64);
+                    }
+                    
+                }
+            }
+
+            session([
+                'user' => $employee,
+                'role' => $role,
+                'employee_ids' => $employee_ids,
+                'employee_rfids' => $employee_rfids,
+            ]);
+
+        }else{
+            session([
+                'user' => $employee,
+                'role' => $role,
+            ]);
+        }
+
+       
     }
 }
