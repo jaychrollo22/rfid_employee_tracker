@@ -112,7 +112,7 @@
                                             <tr v-for="(item, i) in filteredLastScannedEmployeeQueues" :key="i" >
                                                 <td>
                                                     <strong style="font-size:12px">{{item.employee.last_name + ', ' + item.employee.first_name}}</strong><br>
-                                                    <span style="font-size:11px"> {{item.employee.position}} | {{ item.employee.departments.length > 0 ? item.employee.departments[0].name : ""}}</span> <br>
+                                                    <span style="font-size:11px"> {{item.employee.position}} | {{ item.employee.departments.length > 0 ? item.employee.departments[0].name : ""}} | {{ item.employee.locations.length > 0 ? item.employee.locations[0].name : ""}}</span> <br>
                                                     <span style="font-size:11px"> {{ item.employee.door_id_number ? item.employee.door_id_number + ' |' : ""  }} {{item.employee.rfid_64}}</span>
                                                 </td>
                                                 <td style="vertical-align: middle;">
@@ -203,7 +203,7 @@
                                         </td>
                                         <td style="vertical-align: middle;">
                                            <strong style="font-size:12px">{{employee.last_name + ', ' + employee.first_name}}</strong><br>
-                                           <span style="font-size:11px"> {{employee.position}} | {{ employee.departments.length > 0 ? employee.departments[0].name : ""}} | {{ employee.companies.length > 0 ? employee.companies[0].name : ""}}</span> <br>
+                                           <span style="font-size:11px"> {{employee.position}} | {{ employee.departments.length > 0 ? employee.departments[0].name : ""}} | {{ employee.locations.length > 0 ? employee.locations[0].name : ""}}</span> <br>
                                            <span style="font-size:11px"> {{ employee.door_id_number ? employee.door_id_number + ' |' : ""  }} {{employee.rfid_64}}</span>
                                         </td>
                                         <td style="vertical-align: middle;">
@@ -390,7 +390,6 @@
             getEmployees() {
                 let v = this;
                 v.loading = true;
-                
                 v.employees = [];
                 v.totalInOffice = [];
                 v.actualInBGC = [];
@@ -400,7 +399,6 @@
                 v.totalInManila = [];
                 v.actualInIloilo = [];
                 v.totalInIloilo = [];
-
                 axios.get('/get-employees-data')
                 .then(response => { 
                     v.employees = response.data;
