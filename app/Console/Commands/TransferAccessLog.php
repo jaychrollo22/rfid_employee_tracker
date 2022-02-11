@@ -76,7 +76,6 @@ class TransferAccessLog extends Command
                     $employee_current_location = EmployeeCurrentAreaLocation::where('card_code',$card_code)->first();
                     if(empty($employee_current_location)){
                         EmployeeCurrentAreaLocation::create($data);
-
                         //Create Location Logs
                         if($save_access_log = EmployeeCurrentAreaLocationLog::create($data)){
                             AccessLog::where('LogID',$item->LogID)->delete();
@@ -86,18 +85,22 @@ class TransferAccessLog extends Command
                     }else{
                         //If Same Door Detected 
                         if($employee_current_location['door_id'] == $item['DoorID']){
+                            //Update Current Location
+                            $employee_current_location->update($data);
+
                             AccessLog::where('LogID',$item->LogID)->delete();
+                            DB::commit();
                             $x++;
                         }else{
+                            //Update Current Location
+                            $employee_current_location->update($data);
                             //Create Location Logs
                             if($save_access_log = EmployeeCurrentAreaLocationLog::create($data)){
                                 AccessLog::where('LogID',$item->LogID)->delete();
+                                DB::commit();   
                                 $x++;
                             }
                         }
-                        //Update Current Location
-                        $employee_current_location->update($data);
-                        DB::commit();
                     }
                    
                    
