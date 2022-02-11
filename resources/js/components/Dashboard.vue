@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center">
-                    <a href="#" @click="refresh" class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2">Refresh</a>
+                    <a href="#" @click="refresh" class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2">Refresh {{timer ? "(" + timer + ")" : ""}}</a>
                 </div>
             </div>
         </div>
@@ -277,6 +277,9 @@
                 last_scanned_employees : [],
                 currentPageLastScannedEmployee: 0,
                 itemsPerPageLastScannedEmployee: 10,
+
+                timer : '',
+                setTimeInSeconds : 300,
             }
         },
         created () {
@@ -289,10 +292,20 @@
             getLastScannedEmployees(){
                 let v = this;
                 v.last_scanned_employees = [];
+                v.timer = '';
+                v.setTimeInSeconds = 300;
                 axios.get('/last-scanned-employees')
                 .then(response => { 
                     v.last_scanned_employees = response.data;
-                    setInterval(function() {window.location.reload();}, 300000); 
+                    setInterval(function() {
+                        v.setTimeInSeconds -= 1;
+                        if(v.setTimeInSeconds <= 20){
+                            v.timer = v.setTimeInSeconds;
+                            if(v.setTimeInSeconds == 1){
+                                window.location.reload();
+                            }
+                        }
+                    },1000);
                 })
             },
             refresh(){
