@@ -54,6 +54,7 @@ class TransferAccessLog extends Command
         
         $access_logs = AccessLog::where('MsgID','=','1')
                                     ->whereDate('LocalTime','=',$date)
+                                    ->orderBy('LocalTime','ASC')
                                     ->get();
 
         DB::beginTransaction();

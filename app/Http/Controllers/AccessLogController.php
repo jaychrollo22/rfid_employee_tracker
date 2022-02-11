@@ -40,6 +40,7 @@ class AccessLogController extends Controller
         
         $access_logs = AccessLog::where('MsgID','=','1')
                                     ->whereDate('LocalTime','=',$date)
+                                    ->orderBy('LocalTime','ASC')
                                     ->get();
 
         DB::beginTransaction();
@@ -68,13 +69,12 @@ class AccessLogController extends Controller
                             DB::commit();
                             $x++;
                         }
-
                     }else{
                         //If Same Door Detected 
-                        if($employee_current_location['door_id'] == $item['DoorID']){
+                        if($employee_current_location_log['door_id'] == $item['DoorID']){
                             //Update Current Location
                             $employee_current_location->update($data);
-                            
+
                             AccessLog::where('LogID',$item->LogID)->delete();
                             DB::commit();
                             $x++;
@@ -88,7 +88,6 @@ class AccessLogController extends Controller
                                 $x++;
                             }
                         }
-                        
                     }
                     
                 }
