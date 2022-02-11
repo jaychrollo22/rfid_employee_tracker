@@ -390,6 +390,7 @@
             getEmployees() {
                 let v = this;
                 v.loading = true;
+                
                 v.employees = [];
                 v.totalInOffice = [];
                 v.actualInBGC = [];
@@ -399,6 +400,7 @@
                 v.totalInManila = [];
                 v.actualInIloilo = [];
                 v.totalInIloilo = [];
+
                 axios.get('/get-employees-data')
                 .then(response => { 
                     v.employees = response.data;

@@ -116,6 +116,7 @@
                                         <th>Location</th>
                                         <th>Date/Time</th>
                                         <th>Duration</th>
+                                        <th>Stay</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -131,6 +132,9 @@
                                         </td>
                                         <td>
                                             <small style="font-size:12px">{{ calculateDuration(i) }}</small>
+                                        </td>
+                                        <td>
+                                            <small style="font-size:12px">{{ calculateStay(i) }}</small>
                                         </td>
                                     </tr>
                                     <tr v-if="loading_logs">
@@ -200,6 +204,26 @@
                     return this.rendered(from,to);
                 }
             },
+
+            calculateStay(start){
+                let v = this;
+
+                if(start == 0){
+                    return "";
+                }else{
+                    var start = Number(start) - 1;
+                    var end = Number(start) + 1;
+                    var from = '';
+                    var to = '';
+                    if(v.filteredLogs[start] && v.filteredLogs[end]){
+                        from = v.filteredLogs[start].local_time;
+                        to = v.filteredLogs[end].local_time;
+                        return this.rendered(from,to);
+                    }
+                }
+                
+            },
+
             rendered(endTime, startTime){ 
                 if(endTime && startTime){
                     var ms = moment(endTime,"YYYY/MM/DD HH:mm:ss a").diff(moment(startTime,"YYYY/MM/DD HH:mm:ss a"));
