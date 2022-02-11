@@ -85,7 +85,7 @@ class TransferAccessLog extends Command
                         }
                     }else{
                         //If Same Door Detected 
-                        if($employee_current_location_log['door_id'] == $item['DoorID'] && $employee_current_location_log['controller_id'] == $item['ControllerID']){
+                        if($employee_current_location['door_id'] == $item['DoorID'] && $employee_current_location['controller_id'] == $item['ControllerID']){
                             //Update Current Location
                             $employee_current_location->update($data);
 
