@@ -38,7 +38,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <span class="float-right">
-                                     <a href="#" @click="refreshLogs"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" ></i> Refresh</a>
+                                    <a href="#" @click="refreshLogs"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" ></i> Refresh</a>
+                                    <a href="#" @click="download" class="text-default"><i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;"></i> Download</a>
                                 </span>
                             </div>
                         </div>
@@ -167,6 +168,8 @@
 </template>
 
 <script>
+    import Excel from 'exceljs';
+    import FileSaver from 'file-saver';
     export default {
         data() {
             return {
@@ -198,9 +201,9 @@
                 var end = Number(start) + 1;
                 var from = '';
                 var to = '';
-                if(v.filteredLogs[start] && v.filteredLogs[end]){
-                    from = v.filteredLogs[start].local_time;
-                    to = v.filteredLogs[end].local_time;
+                if(v.filteredLogQueues[start] && v.filteredLogQueues[end]){
+                    from = v.filteredLogQueues[start].local_time;
+                    to = v.filteredLogQueues[end].local_time;
                     return this.rendered(from,to);
                 }
             },
@@ -215,9 +218,9 @@
                     var end = Number(start) + 1;
                     var from = '';
                     var to = '';
-                    if(v.filteredLogs[start] && v.filteredLogs[end]){
-                        from = v.filteredLogs[start].local_time;
-                        to = v.filteredLogs[end].local_time;
+                    if(v.filteredLogQueues[start] && v.filteredLogQueues[end]){
+                        from = v.filteredLogQueues[start].local_time;
+                        to = v.filteredLogQueues[end].local_time;
                         return this.rendered(from,to);
                     }
                 }
@@ -333,6 +336,37 @@
             showNextLinkLog() {
                 return this.currentPageLog == (this.totalPagesLog - 1) ? false : true;
             },
+            download(){
+                let v = this;
+                var workbook = new Excel.Workbook();
+                var employee = v.employee.first_name + ' ' + v.employee.last_name;
+                var worksheet = workbook.addWorksheet(employee,{pageSetup:{paperSize: 5, orientation:'landscape'}});
+                worksheet.pageSetup.margins = {
+                    left: 0.25, right: 0.25,
+                    top: 0.75, bottom: 0.75,
+                    header: 0.3, footer: 0.3
+                };
+
+                //Header-------------------------------------------------------------------?
+                worksheet.columns = [{ width: 30 },{ width: 30},{ width: 30},{ width: 30}];
+
+                worksheet.getCell('A1').value = 'Location';
+                worksheet.getCell('B1').value = 'Date/Time';
+                worksheet.getCell('C1').value = 'Duration';
+                worksheet.getCell('D1').value = 'Stay';
+
+                let worksheet_ctr = 2;
+                v.filteredLogs.forEach(function(w,i){
+                    worksheet.getCell('A'+worksheet_ctr).value = v.getCurrentLocation(w);
+                    worksheet.getCell('B'+worksheet_ctr).value = v.changeDateFormat(w.local_time);
+                    worksheet.getCell('C'+worksheet_ctr).value = v.calculateDuration(i);
+                    worksheet.getCell('D'+worksheet_ctr).value = v.calculateStay(i);
+                    worksheet_ctr++;
+                })
+
+                //Download
+                workbook.xlsx.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), v.employee.first_name + ' ' + v.employee.last_name +  ` View History Logs.xlsx`)).catch(err => console.log('Error writing excel export', err));
+            }
         },
         computed: {
             filteredLogs(){
