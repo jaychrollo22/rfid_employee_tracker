@@ -414,6 +414,7 @@
                 worksheet.getCell('I1').value = 'CodeType';
                 worksheet.getCell('J1').value = 'CardType';
                 worksheet.getCell('K1').value = 'CardStatus';
+                worksheet.getCell('L1').value = 'DoorIDNumber';
 
                 let worksheet_ctr = 2;
                 v.filteredEmployees.forEach(function(w){
@@ -423,7 +424,11 @@
                     worksheet.getCell('C'+worksheet_ctr).value = w.middle_name;
                     worksheet.getCell('D'+worksheet_ctr).value = w.last_name;
                     worksheet.getCell('E'+worksheet_ctr).value = w.id;
-                    worksheet.getCell('F'+worksheet_ctr).value = w.departments ? w.departments[0].name : "";
+                    var department = '';
+                    if(w.departments){
+                        department = w.departments[0] ? w.departments[0].name : "";
+                    }
+                    worksheet.getCell('F'+worksheet_ctr).value = department;
                     worksheet.getCell('G'+worksheet_ctr).value = w.position;
 
                     if(w.rfid_64){
@@ -437,6 +442,7 @@
                     worksheet.getCell('I'+worksheet_ctr).value = '64';
                     worksheet.getCell('J'+worksheet_ctr).value = '1';
                     worksheet.getCell('K'+worksheet_ctr).value = '0';
+                    worksheet.getCell('L'+worksheet_ctr).value = w.door_id_number;
 
                     worksheet_ctr++;
                 })
