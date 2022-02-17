@@ -448,7 +448,30 @@
                 })
 
                 //Download
-                workbook.csv.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), `EMPLOYEES.csv`)).catch(err => console.log('Error writing excel export', err));
+                var file_name = '';
+                if(this.filter.company){
+                    var company = Object.values(v.companies).filter(company => {
+                    if(company.id == this.filter.company){
+                        return company.name;
+                    }});
+                    file_name = file_name + company[0].name + '_';
+                }
+                if(this.filter.department){
+                    var department = Object.values(v.departments).filter(department => {
+                    if(department.id == this.filter.department){
+                        return department.name;
+                    }});
+                    file_name = file_name + department[0].name + '_';
+                }
+                if(this.filter.location){
+                    var location = Object.values(v.locations).filter(location => {
+                    if(location.id == this.filter.location){
+                        return location.name;
+                    }});
+                    file_name = file_name + location[0].name + '_';
+                }
+
+                workbook.csv.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), file_name + `_EMPLOYEES.csv`)).catch(err => console.log('Error writing excel export', err));
 
             }
         },
