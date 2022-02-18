@@ -9,6 +9,7 @@ use App\RfidDoor;
 
 use DB;
 use Auth;
+use Storage;
 
 class RfidSettingsController extends Controller
 {
@@ -154,6 +155,14 @@ class RfidSettingsController extends Controller
             $data['updated_by'] = Auth::user()->id;
             $door = RfidDoor::where('id',$data['id'])->first();
             if($door){
+                if(isset($request->map_file)){
+                    if($request->file('map_file')){
+                        $attachment = $request->file('map_file');   
+                        $filename = $door->id . '.' . $attachment->getClientOriginalExtension();
+                        $path = Storage::disk('public')->putFileAs('map_file', $attachment , $filename);
+                        $data['map_file'] = $filename;
+                    }    
+                }
                 unset($data['id']);
                 if($door->update($data)){
                     DB::commit();

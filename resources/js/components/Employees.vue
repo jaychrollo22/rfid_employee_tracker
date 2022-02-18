@@ -99,7 +99,7 @@
                                         </td>
                                         <td style="vertical-align: middle;">
                                             <div v-if="employee.employee_current_location_latest">
-                                                <strong style="font-size:12px" :class="locationColor(employee.employee_current_location_latest)">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
+                                                <strong style="font-size:12px;cursor:pointer;" :class="locationColor(employee.employee_current_location_latest)" @click="showMap(employee.employee_current_location_latest,employee)">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
                                                 <strong style="font-size:11px">{{ changeDateFormat(employee.employee_current_location_latest.local_time)}}</strong>
                                             </div>
                                             <div v-else>
@@ -192,6 +192,29 @@
             </div>
         </div>
 
+    <!-- Show Map -->
+    <div class="modal fade" id="door-map-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-fixed" role="document">
+            <div class="modal-content">
+                <div>
+                    <button type="button" class="close mt-2 mr-2" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> 
+                <div class="modal-header">
+                    <h2 class="col-12 modal-title text-center">{{map_employee}} | CURRENT LOCATION</h2>
+                </div>
+                <div class="modal-body">
+                   <div class="row">
+                       <div class="col-md-12 justify-content-center mb-2 text-center" v-if="map_file">
+                            <img :src="'storage/map_file/'+map_file+'?v='+Math.random()" style="width:100%;height:auto;border:2px dotted;" @error="imageLoadError">
+                        </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 </template>
 
@@ -221,7 +244,9 @@
                     'company' : '',
                     'department' : '',
                     'location' : '',
-                }
+                },
+                map_employee : '',
+                map_file : '',
             }
         },
         created () {
@@ -234,6 +259,29 @@
             this.getDepartments();
         },
         methods: {
+            imageLoadError(event) { 
+                event.target.src = "/img/imagenotavailable.PNG"; 
+            },
+            showMap(location,employee){
+                this.map_file = '';
+                var map = this.getCurrentLocationMap(location);
+                if(map){
+                    this.map_employee = employee.first_name + ' ' + employee.last_name;;
+                    this.map_file = map;
+                    $('#door-map-modal').modal('show');
+                }
+            },
+            getCurrentLocationMap(current_location){
+                let v = this;
+                var location = Object.values(v.doors).filter(door => {
+                    if(current_location.controller_id == door.controller_id && current_location.door_id == door.door_id){
+                        return door;
+                    }
+                });
+                if(location.length > 0){
+                    return location[0].map_file;
+                }
+            },
             clearFilter(){
                 let v = this;
                 v.filter.company = '';

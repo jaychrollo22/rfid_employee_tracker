@@ -189,7 +189,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12 justify-content-center mb-2 text-center" v-if="edit_door.map_file">
+                            <img :src="'storage/map_file/'+edit_door.map_file+'?v='+Math.random()" style="width:100%;height:auto;border:2px dotted;" @error="imageLoadError">
+                        </div>
                         <div class="col-md-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="cursor:pointer;width:40px;">
+                                        <i class="fas fa-map"></i>
+                                    </span>
+                                </div>
+                                <input type="file" id="map_file_edit" class="form-control" ref="file" accept="image/*" v-on:change="mapHandleFileUploadEdit()"/>
+                            </div> 
+                        </div>
+
+                        <div class="col-md-12 mt-5">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" style="cursor:pointer;width:40px;">
@@ -251,7 +265,8 @@
                     'id' : '',
                     'door_id' : '',
                     'door_name' : '',
-                    'controller_id' : ''
+                    'controller_id' : '',
+                    'map_file' : ''
                 },
                 doors : [],
                 errors : [],
@@ -261,7 +276,9 @@
                 saveDisable : false, 
                 loading : false,
 
-                controllers : []
+                controllers : [],
+
+                map_file : '',
             }
         },
         created () {
@@ -269,6 +286,13 @@
             this.getRfidControllers();
         },
         methods: {
+            imageLoadError(event) { 
+                event.target.src = "/img/imagenotavailable.PNG"; 
+            },
+            mapHandleFileUploadEdit(){
+                var file = document.getElementById("map_file_edit");
+                this.map_file = file.files[0];
+            },
             updateRfidDoor(){
                 let v = this;
                 v.saveDisable = true;
@@ -285,6 +309,11 @@
                         formData.append('door_id', v.edit_door.door_id ? v.edit_door.door_id : "");
                         formData.append('door_name', v.edit_door.door_name ? v.edit_door.door_name : "");
                         formData.append('controller_id', v.edit_door.controller_id ? v.edit_door.controller_id : "");
+
+                        if(v.map_file){
+                            formData.append('map_file', v.map_file);
+                        }
+
                         axios.post(`/update-rfid-settings-door`, formData)
                         .then(response =>{
                             if(response.data.status == "saved"){
@@ -314,6 +343,9 @@
                 v.edit_door.door_id = String(door.door_id);
                 v.edit_door.door_name = door.door_name;
                 v.edit_door.controller_id = door.controller_id;
+                v.edit_door.map_file = door.map_file;
+                v.map_file = '';
+                document.getElementById("map_file_edit").value = '';
                 $('#edit-rfid-door-modal').modal('show');
             },
             addRfidDoor(){
