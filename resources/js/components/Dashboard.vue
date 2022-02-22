@@ -208,7 +208,7 @@
                                         </td>
                                         <td style="vertical-align: middle;">
                                             <div v-if="employee.employee_current_location_latest">
-                                                <strong style="font-size:12px" :class="locationColor(employee.employee_current_location_latest)">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
+                                                <strong style="font-size:12px;cursor:pointer;" :class="locationColor(employee.employee_current_location_latest)" @click="showMap(employee.employee_current_location_latest,employee)">{{ getCurrentLocation(employee.employee_current_location_latest) }}</strong> <br>
                                                 <strong style="font-size:11px">{{ changeDateFormat(employee.employee_current_location_latest.local_time)}}</strong>
                                             </div>
                                             <div v-else>
@@ -244,7 +244,7 @@
 
     <!-- Show Map -->
     <div class="modal fade" id="door-map-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-fixed" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div>
                     <button type="button" class="close mt-2 mr-2" data-dismiss="modal" aria-label="Close">
