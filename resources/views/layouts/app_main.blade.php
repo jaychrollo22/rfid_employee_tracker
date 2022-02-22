@@ -89,7 +89,7 @@
         </span>
     </div>
    
-    <script src="{{ asset('js/all.js?v=1.0.4') }}" defer></script>
+    <script src="{{ asset('js/all.js?v=1.0.5') }}" defer></script>
 
     <!--begin::Global Theme Bundle(used by all pages)-->
     <script src="assets/plugins/global/plugins.bundle.js"></script>
