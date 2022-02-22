@@ -252,7 +252,7 @@
                     </button>
                 </div> 
                 <div class="modal-header">
-                    <h2 class="col-12 modal-title text-center">{{map_employee}} | CURRENT LOCATION</h2>
+                    <h2 class="col-12 modal-title text-center">{{map_employee}} | {{map_location}}</h2>
                 </div>
                 <div class="modal-body">
                    <div class="row">
@@ -303,6 +303,7 @@
                 setTimeInSeconds : 300,
 
                 map_employee : '',
+                map_location : '',
                 map_file : '',
             }
         },
@@ -319,9 +320,11 @@
             showMap(location,employee){
                 this.map_file = '';
                 var map = this.getCurrentLocationMap(location);
+                var map_location = this.getCurrentLocation(location);
                 if(map){
                     this.map_employee = employee.first_name + ' ' + employee.last_name;
                     this.map_file = map;
+                    this.map_location = map_location;
                     $('#door-map-modal').modal('show');
                 }
             },
@@ -406,6 +409,9 @@
                         }
                         else if(location[0].rfid_controller.location == 'MANILA'){
                             return 'text-primary';
+                        }
+                        else if(location[0].rfid_controller.location == 'ILOILO'){
+                            return 'text-warning';
                         }else {
                             return 'text-default';
                         }
