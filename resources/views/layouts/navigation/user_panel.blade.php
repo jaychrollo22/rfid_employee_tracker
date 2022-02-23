@@ -39,6 +39,7 @@
                             <span class="navi-text text-hover-primary">{{ Auth::user()->email }}</span>
                         </span>
                     </a>
+                    <a href="/user_guide/RFID_EMPLOYEE_TRACKER.pdf" target="_blank" class="btn btn-sm btn-light-success font-weight-bolder py-2 px-5">User Guide</a>
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
