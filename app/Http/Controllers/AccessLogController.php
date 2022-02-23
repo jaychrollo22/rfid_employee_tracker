@@ -70,8 +70,10 @@ class AccessLogController extends Controller
                             $x++;
                         }
                     }else{
+                        $date_today = date('Y-m-d');
+                        $date_local_time = date('Y-m-d',strtotime($item['LocalTime']));
                         //If Same Door Detected 
-                        if($employee_current_location['door_id'] == $item['DoorID'] && $employee_current_location['controller_id'] == $item['ControllerID']){
+                        if($employee_current_location['door_id'] == $item['DoorID'] && $employee_current_location['controller_id'] == $item['ControllerID'] && $date_today == $date_local_time){
                             //Update Current Location
                             $employee_current_location->update($data);
 
