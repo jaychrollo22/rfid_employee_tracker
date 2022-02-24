@@ -85,7 +85,7 @@ class TransferAccessLog extends Command
                         }
                     }else{
                         $date_today = date('Y-m-d');
-                        $date_local_time = date('Y-m-d',strtotime($item['LocalTime']));
+                        $date_local_time = date('Y-m-d',strtotime($employee_current_location['local_time']));
                         //If Same Door Detected 
                         if($employee_current_location['door_id'] == $item['DoorID'] && $employee_current_location['controller_id'] == $item['ControllerID'] && $date_today == $date_local_time){
                             //Update Current Location
