@@ -103,14 +103,70 @@ class EmployeeController extends Controller
     }
 
     public function locations(){
-        return Location::orderBy('name','ASC')->get();
+
+        if(session('role') == "Manager"){
+            $employees = Employee::select('id')
+                                    ->with(
+                                        array(
+                                            'locations',
+                                        )
+                                    )
+                                    ->whereIn('id',session('employee_ids'))
+                                    ->where('status','Active')
+                                    ->orderBy('last_name','ASC')
+                                    ->get();
+            $location_ids = [];
+            foreach($employees as $employee){
+                array_push($location_ids , $employee->locations[0]->id);
+            }
+            return Location::select('id','name')->whereIn('id',$location_ids)->get();
+        }else{
+            return Location::select('id','name')->get();
+        }
+
     }
 
     public function departments(){
-        return Department::orderBy('name','ASC')->get();
+        if(session('role') == "Manager"){
+            $employees = Employee::select('id')
+                                    ->with(
+                                        array(
+                                            'departments',
+                                        )
+                                    )
+                                    ->whereIn('id',session('employee_ids'))
+                                    ->where('status','Active')
+                                    ->orderBy('last_name','ASC')
+                                    ->get();
+            $department_ids = [];
+            foreach($employees as $employee){
+                array_push($department_ids , $employee->departments[0]->id);
+            }
+            return Department::select('id','name')->whereIn('id',$department_ids)->get();
+        }else{
+            return Department::select('id','name')->get();
+        }
     }
     
     public function companies(){
-        return Company::orderBy('name','ASC')->where('status','Active')->get();
+       if(session('role') == "Manager"){
+            $employees = Employee::select('id')
+                                    ->with(
+                                        array(
+                                            'companies',
+                                        )
+                                    )
+                                    ->whereIn('id',session('employee_ids'))
+                                    ->where('status','Active')
+                                    ->orderBy('last_name','ASC')
+                                    ->get();
+            $company_ids = [];
+            foreach($employees as $employee){
+                array_push($company_ids , $employee->companies[0]->id);
+            }
+            return Company::select('id','name')->whereIn('id',$company_ids)->get();
+        }else{
+            return Company::select('id','name')->get();
+        }
     }
 }
