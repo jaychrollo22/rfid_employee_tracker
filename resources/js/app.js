@@ -27,6 +27,10 @@ Vue.component('activity-logs', require('./components/ActivityLogs.vue').default)
 Vue.component('rfid-controllers', require('./components/RfidControllers.vue').default);
 Vue.component('rfid-doors', require('./components/RfidDoors.vue').default);
 
+// Reports
+Vue.component('reports-employee-locations', require('./components/ReportsEmployeeLocations.vue').default);
+Vue.component('reports-by-doors', require('./components/ReportsByDoors.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

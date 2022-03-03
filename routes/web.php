@@ -67,3 +67,7 @@ Route::get('/get-session-show-favorites', 'UserFavoritesController@getSessionSho
 Route::get('/access-log', 'AccessLogController@getAccessLog');
 Route::get('/transfer-access-log', 'AccessLogController@transferAccessGrantedLogs');
 Route::get('/delete-invalid-access-log', 'AccessLogController@deleteInvalidAccessLog');
+
+//Reports
+Route::get('/reports-employee-locations','ReportsController@reportsEmployeeLocations');
+Route::get('/reports-by-doors','ReportsController@reportsByDoors');
