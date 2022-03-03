@@ -39,7 +39,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <span class="float-right">
-                                <a href="#" v-if="loading_download" @click="download" class="text-default"><i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;"></i> Download</a>
+                                 <a href="#" @click="refresh" class="text-default"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;"></i> Refresh  </a>
+                                <a href="#" v-if="loading_download" @click="download" class="text-default">| <i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;"></i> Download</a>
                             </span>
                         </div>
                     </div>
@@ -247,6 +248,10 @@
             this.getRfidDoors();
         },
         methods: {
+            refresh(){
+                this.getEmployees();
+                this.getRfidDoors();
+            },
             download(){
                 let v = this;
                 var workbook = new Excel.Workbook();
