@@ -468,6 +468,7 @@
                 worksheet.getCell('J1').value = 'CardType';
                 worksheet.getCell('K1').value = 'CardStatus';
                 worksheet.getCell('L1').value = 'DoorIDNumber';
+                worksheet.getCell('M1').value = 'UserID';
 
                 let worksheet_ctr = 2;
                 v.filteredEmployees.forEach(function(w){
@@ -496,6 +497,7 @@
                     worksheet.getCell('J'+worksheet_ctr).value = '1';
                     worksheet.getCell('K'+worksheet_ctr).value = '0';
                     worksheet.getCell('L'+worksheet_ctr).value = w.door_id_number;
+                    worksheet.getCell('M'+worksheet_ctr).value = w.user_id;
 
                     worksheet_ctr++;
                 })
