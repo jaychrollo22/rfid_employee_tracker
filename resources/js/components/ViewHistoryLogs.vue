@@ -1,31 +1,22 @@
 <template>
 <div>
    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        <!--begin::Subheader-->
         <div class="subheader py-2 py-lg-12 subheader-transparent" id="kt_subheader">
             <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-                <!--begin::Info-->
                 <div class="d-flex align-items-center flex-wrap mr-1">
-                    <!--begin::Heading-->
                     <div class="d-flex flex-column">
-                        <!--begin::Title-->
                         <h2 class="text-white font-weight-bold my-2 mr-5">History Logs</h2>
-                        <!--end::Title-->
-                        <!--begin::Breadcrumb-->
                         <div class="d-flex align-items-center font-weight-bold my-2">
-                            <!--begin::Item-->
                             <a href="#" class="opacity-75 hover-opacity-100">
                                 <i class="flaticon2-shelter text-white icon-1x"></i>
                             </a>
-                            <!--end::Item-->
-                            <!--begin::Item-->
                             <span class="label label-dot label-sm bg-white opacity-75 mx-3"></span>
                             <a href="" class="text-white text-hover-white opacity-75 hover-opacity-100">Track and Trace Employee</a>
-                            <!--end::Item-->
                         </div>
-                        <!--end::Breadcrumb-->
                     </div>
-                    <!--end::Heading-->
+                </div>
+                 <div class="d-flex align-items-center">
+                    <a href="#" @click="refreshLogs" class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2">Refresh</a>
                 </div>
             </div>
         </div>
@@ -38,7 +29,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <span class="float-right">
-                                    <a href="#" @click="refreshLogs"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" ></i> Refresh</a>
+                                    <!-- <a href="#" @click="refreshLogs"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" ></i> Refresh</a> -->
                                     <a href="#" @click="download" class="text-default"><i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;"></i> Download</a>
                                 </span>
                             </div>
@@ -340,22 +331,24 @@
                 })
             },
             refreshLogs() {
+                this.employee_current_location_logs = [];
                 this.getCurrentTransferAccessLogs();
-                let v = this;
-                v.from = '';
-                v.to = '';
-                v.loading_logs = true;
-                v.employee_current_location_logs = [];
-                axios.get('/view-history-logs-data?employee_id='+v.employee.id)
-                .then(response => { 
-                    v.employee_current_location_latest = response.data.employee_current_location_latest;
-                    v.employee_current_location_logs = response.data.employee_current_location_logs;
-                    v.loading_logs = false;
-                })
-                .catch(error => { 
-                    v.errors = error.response.data.error;
-                    v.loading_logs = false;
-                })
+                this.getHistoryLogs();
+                // let v = this;
+                // v.from = '';
+                // v.to = '';
+                // v.loading_logs = true;
+                // v.employee_current_location_logs = [];
+                // axios.get('/view-history-logs-data?employee_id='+v.employee.id)
+                // .then(response => { 
+                //     v.employee_current_location_latest = response.data.employee_current_location_latest;
+                //     v.employee_current_location_logs = response.data.employee_current_location_logs;
+                //     v.loading_logs = false;
+                // })
+                // .catch(error => { 
+                //     v.errors = error.response.data.error;
+                //     v.loading_logs = false;
+                // })
             },
             getCurrentTransferAccessLogs(){
                 axios.get('/transfer-access-log');

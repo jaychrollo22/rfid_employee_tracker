@@ -103,4 +103,76 @@ class AccessLogController extends Controller
         }
         
     }
+
+    //Transfer Access Logs by Card
+    public function transferAccessGrantedLogByCards(Request $request){
+        
+        $date = date('Y-m-d');
+        
+        $access_logs = AccessLog::where('MsgID','=','1')
+                                    ->whereDate('LocalTime','=',$date)
+                                    ->where('card_code',$request->card_code)
+                                    ->orderBy('LocalTime','ASC')
+                                    ->get();
+
+        DB::beginTransaction();
+        try{
+            if($access_logs){
+                $x = 0;
+                foreach($access_logs as $item){
+                    //Save Access Log
+                    $card_code = substr($item['CardCode'],3);
+                    $local_time = date('Y-m-d H:i:s',strtotime($item['LocalTime']));
+                    $data = [
+                        'card_code'=>$card_code,
+                        'controller_id'=>$item['ControllerID'],
+                        'door_id'=>$item['DoorID'],
+                        'local_time'=>$local_time,
+                        'direction'=>$item['Direction'],
+                    ];
+
+                    
+                    $employee_current_location = EmployeeCurrentAreaLocation::where('card_code',$card_code)->first();
+                    if(empty($employee_current_location)){
+                        EmployeeCurrentAreaLocation::create($data);
+                        //Create Location Logs
+                        if($save_access_log = EmployeeCurrentAreaLocationLog::create($data)){
+                            AccessLog::where('LogID',$item->LogID)->delete();
+                            DB::commit();
+                            $x++;
+                        }
+                    }else{
+                        $date_today = date('Y-m-d');
+                        $date_local_time = date('Y-m-d',strtotime($employee_current_location['local_time']));
+                        //If Same Door Detected 
+                        if($employee_current_location['door_id'] == $item['DoorID'] && $employee_current_location['controller_id'] == $item['ControllerID'] && $date_today == $date_local_time){
+                            //Update Current Location
+                            $employee_current_location->update($data);
+
+                            AccessLog::where('LogID',$item->LogID)->delete();
+                            DB::commit();
+                            $x++;
+                        }else{
+                            //Update Current Location
+                            $employee_current_location->update($data);
+                            //Create Location Logs
+                            if($save_access_log = EmployeeCurrentAreaLocationLog::create($data)){
+                                AccessLog::where('LogID',$item->LogID)->delete();
+                                DB::commit();   
+                                $x++;
+                            }
+                        }
+                    }
+                    
+                }
+                return $reponse = [
+                    'count' => $x
+                ];
+            }
+        }catch (Exception $e) {
+            DB::rollBack();
+            return 'error';
+        }
+        
+    }
 }

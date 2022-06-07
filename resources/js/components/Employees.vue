@@ -180,6 +180,17 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <select class="form-control" v-model="filter.current_location" id="current_location">
+                                        <option value="">Choose Current Location</option>
+                                        <option value="BGC"> BGC</option>
+                                        <option value="ILO"> ILO</option>
+                                        <option value="MNL"> MNL</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -451,11 +462,12 @@
                     left: 0.25, right: 0.25,
                     top: 0.75, bottom: 0.75,
                     header: 0.3, footer: 0.3
-                };
+                };                
 
                 //Header-------------------------------------------------------------------?
                 worksheet.columns = [{ width: 30 },{ width: 30},{ width: 30},{ width: 30},{ width: 30}];
 
+               
                 worksheet.getCell('A1').value = 'DisplayName';
                 worksheet.getCell('B1').value = 'FirstName';
                 worksheet.getCell('C1').value = 'MiddleName';
@@ -469,6 +481,13 @@
                 worksheet.getCell('K1').value = 'CardStatus';
                 worksheet.getCell('L1').value = 'DoorIDNumber';
                 worksheet.getCell('M1').value = 'UserID';
+
+                const mybase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==";
+                const imageId1 = workbook.addImage({
+                    base64: mybase64,
+                    extension: 'png',
+                });
+                worksheet.addImage(imageId1, 'N1:O6');
 
                 let worksheet_ctr = 2;
                 v.filteredEmployees.forEach(function(w){
@@ -526,7 +545,11 @@
                     file_name = file_name + location[0].name + '_';
                 }
 
-                workbook.csv.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), file_name + `_EMPLOYEES.csv`)).catch(err => console.log('Error writing excel export', err));
+                // workbook.xls.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), file_name + `_EMPLOYEES.xls`)).catch(err => console.log('Error writing excel export', err));
+
+                workbook.xlsx.writeBuffer()
+                .then(buffer => FileSaver.saveAs(new Blob([buffer]), `Employee List.xlsx`))
+                .catch(err => console.log('Error writing excel export', err));
 
             }
         },

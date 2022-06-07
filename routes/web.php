@@ -66,6 +66,7 @@ Route::get('/get-session-show-favorites', 'UserFavoritesController@getSessionSho
 //Access Log Testings
 Route::get('/access-log', 'AccessLogController@getAccessLog');
 Route::get('/transfer-access-log', 'AccessLogController@transferAccessGrantedLogs');
+Route::get('/transfer-access-log-by-card', 'AccessLogController@transferAccessGrantedLogByCards');
 Route::get('/delete-invalid-access-log', 'AccessLogController@deleteInvalidAccessLog');
 
 //Reports
