@@ -445,7 +445,7 @@
                 let v = this;
                 if(v.doors){
                     return Object.values(v.doors).filter(door => {
-                        return door.door_name.toLowerCase().includes(this.keywords.toLowerCase()) 
+                        return door.rfid_controller.controller_name.toLowerCase().includes(this.keywords.toLowerCase()) || door.door_name.toLowerCase().includes(this.keywords.toLowerCase()) 
                     });
                 }else{
                     return [];

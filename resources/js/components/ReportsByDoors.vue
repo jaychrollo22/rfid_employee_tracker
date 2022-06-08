@@ -147,8 +147,6 @@
                             <table class="table table-checkable" id="kt_datatable">
                                 <thead>
                                     <tr>
-                                        <th class="text-center"></th>
-                                        <th class="text-center"></th>
                                         <th>Employee</th>
                                         <th>Current Location</th>
                                         <th class="text-center">Logs</th>
@@ -156,19 +154,6 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(employee, i) in filteredEmployeeQueues" :key="i" >
-                                        <td width="20px" align="center" style="vertical-align: middle;">
-                                            <div v-if="employee.user_favorite.length > 0">
-                                                <i v-if="employee.user_favorite[0].status == '1'" class="fas fa-star text-warning" style="cursor:pointer;" @click="saveFavorite(employee)"></i>
-                                                <i v-else class="far fa-star" style="cursor:pointer;" @click="saveFavorite(employee)"></i>
-                                            </div>
-                                            <div v-else>
-                                                <i class="far fa-star" style="cursor:pointer;" @click="saveFavorite(employee)"></i>
-                                            </div>
-                                        </td>
-                                        <td width="20px" align="center" style="vertical-align: middle;">
-                                            <i class="fas fa-id-badge text-success" v-if="employee.rfid_64" title="Registered"></i>
-                                            <i class="fas fa-id-badge text-danger" v-else title="Not Registered"></i>
-                                        </td>
                                         <td style="vertical-align: middle;">
                                            <strong style="font-size:12px">{{employee.last_name + ', ' + employee.first_name}}</strong><br>
                                            <span style="font-size:11px"> {{employee.position}} | {{ employee.departments.length > 0 ? employee.departments[0].name : ""}} | {{ employee.locations.length > 0 ? employee.locations[0].name : ""}}</span> <br>

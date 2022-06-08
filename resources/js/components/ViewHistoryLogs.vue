@@ -107,8 +107,8 @@
                                         <th class="text-center"></th>
                                         <th>Location</th>
                                         <th>Date/Time</th>
-                                        <th>Duration</th>
-                                        <th>Stay</th>
+                                        <!-- <th>Duration</th> -->
+                                        <th>Duration/Stay</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -122,9 +122,9 @@
                                         <td>
                                             <small style="font-size:12px">{{changeDateFormat(log.local_time)}}</small>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <small style="font-size:12px">{{ calculateDuration(i) }}</small>
-                                        </td>
+                                        </td> -->
                                         <td>
                                             <small style="font-size:12px">{{ calculateStay(i) }}</small>
                                         </td>
@@ -334,21 +334,6 @@
                 this.employee_current_location_logs = [];
                 this.getCurrentTransferAccessLogs();
                 this.getHistoryLogs();
-                // let v = this;
-                // v.from = '';
-                // v.to = '';
-                // v.loading_logs = true;
-                // v.employee_current_location_logs = [];
-                // axios.get('/view-history-logs-data?employee_id='+v.employee.id)
-                // .then(response => { 
-                //     v.employee_current_location_latest = response.data.employee_current_location_latest;
-                //     v.employee_current_location_logs = response.data.employee_current_location_logs;
-                //     v.loading_logs = false;
-                // })
-                // .catch(error => { 
-                //     v.errors = error.response.data.error;
-                //     v.loading_logs = false;
-                // })
             },
             getCurrentTransferAccessLogs(){
                 axios.get('/transfer-access-log');
@@ -396,15 +381,15 @@
 
                 worksheet.getCell('A1').value = 'Location';
                 worksheet.getCell('B1').value = 'Date/Time';
-                worksheet.getCell('C1').value = 'Duration';
-                worksheet.getCell('D1').value = 'Stay';
+                // worksheet.getCell('C1').value = 'Duration';
+                worksheet.getCell('C1').value = 'Duration/Stay';
 
                 let worksheet_ctr = 2;
                 v.filteredLogs.forEach(function(w,i){
                     worksheet.getCell('A'+worksheet_ctr).value = v.getCurrentLocation(w);
                     worksheet.getCell('B'+worksheet_ctr).value = v.changeDateFormat(w.local_time);
-                    worksheet.getCell('C'+worksheet_ctr).value = v.calculateDuration(i);
-                    worksheet.getCell('D'+worksheet_ctr).value = v.calculateStay(i);
+                    // worksheet.getCell('C'+worksheet_ctr).value = v.calculateDuration(i);
+                    worksheet.getCell('C'+worksheet_ctr).value = v.calculateStay(i);
                     worksheet_ctr++;
                 })
 
