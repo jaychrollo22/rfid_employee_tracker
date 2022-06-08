@@ -15,7 +15,7 @@
                         </div>
                     </div>
                 </div>
-                 <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center">
                     <a href="#" @click="refreshLogs" class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2">Refresh</a>
                 </div>
             </div>
