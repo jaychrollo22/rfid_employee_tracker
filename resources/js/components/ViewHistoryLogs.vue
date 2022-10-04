@@ -385,7 +385,7 @@
                 worksheet.getCell('C1').value = 'Duration/Stay';
 
                 let worksheet_ctr = 2;
-                v.filteredLogs.forEach(function(w,i){
+                v.employee_current_location_logs.forEach(function(w,i){
                     worksheet.getCell('A'+worksheet_ctr).value = v.getCurrentLocation(w);
                     worksheet.getCell('B'+worksheet_ctr).value = v.changeDateFormat(w.local_time);
                     // worksheet.getCell('C'+worksheet_ctr).value = v.calculateDuration(i);

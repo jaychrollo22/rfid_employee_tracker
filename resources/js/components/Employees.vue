@@ -59,11 +59,19 @@
                             </select>
                             Total : {{ filteredEmployees.length }}
                         </div>
-                        <div class="float-left mt-5">
+                        <div class="float-left mt-5 mr-2">
                             <div class="form-check form-check-custom form-check-solid">
                                 <input class="form-check-input" type="checkbox" v-model="show_favorites" @change="saveSessionShowFavorites" />
                                 <label class="form-check-label" for="flexCheckDefault">
                                     &nbsp;Show Favorites
+                                </label>
+                            </div>
+                        </div>
+                        <div class="float-left mt-5 mr-2">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input" type="checkbox" v-model="filterNotDetected" />
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    &nbsp;Show Not Detected
                                 </label>
                             </div>
                         </div>
@@ -243,6 +251,7 @@
                 employee : [],
                 employees : [],
                 errors : [],
+                filterNotDetected : false,
                 currentPageEmployee: 0,
                 itemsPerPageEmployee: 10, 
                 rfid_64_status : '',
@@ -485,12 +494,12 @@
                 worksheet.getCell('L1').value = 'DoorIDNumber';
                 worksheet.getCell('M1').value = 'UserID';
 
-                const mybase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==";
-                const imageId1 = workbook.addImage({
-                    base64: mybase64,
-                    extension: 'png',
-                });
-                worksheet.addImage(imageId1, 'N1:O6');
+                // const mybase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==";
+                // const imageId1 = workbook.addImage({
+                //     base64: mybase64,
+                //     extension: 'png',
+                // });
+                // worksheet.addImage(imageId1, 'N1:O6');
 
                 let worksheet_ctr = 2;
                 v.filteredEmployees.forEach(function(w){
@@ -562,9 +571,29 @@
                 if(v.employees){
                     return Object.values(v.employees).filter(employee => {
                         var full_name = employee.first_name + ' ' + employee.last_name;
-                        if(v.show_favorites){
-                            if(employee.user_favorite.length > 0){
-                                if(employee.user_favorite[0].status == '1'){
+
+                        if(v.filterNotDetected == true){
+                            if(!employee.employee_current_location_latest){
+                                if(v.show_favorites){
+                                    if(employee.user_favorite.length > 0){
+                                        if(employee.user_favorite[0].status == '1'){
+                                            if(v.rfid_64_status){
+                                                if(v.rfid_64_status == '1'){
+                                                    if(employee.rfid_64){
+                                                        return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.rfid_64.toLowerCase().includes(this.keywords.toLowerCase())
+                                                    }
+                                                }
+                                                else if(v.rfid_64_status == '0'){
+                                                    if(employee.rfid_64 == "" || employee.rfid_64 == null){
+                                                        return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase())
+                                                    }
+                                                }
+                                            }else{
+                                                return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) 
+                                            }
+                                        }
+                                    }
+                                }else{
                                     if(v.rfid_64_status){
                                         if(v.rfid_64_status == '1'){
                                             if(employee.rfid_64){
@@ -582,19 +611,40 @@
                                 }
                             }
                         }else{
-                            if(v.rfid_64_status){
-                                if(v.rfid_64_status == '1'){
-                                    if(employee.rfid_64){
-                                        return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.rfid_64.toLowerCase().includes(this.keywords.toLowerCase())
-                                    }
-                                }
-                                else if(v.rfid_64_status == '0'){
-                                    if(employee.rfid_64 == "" || employee.rfid_64 == null){
-                                        return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase())
+                            if(v.show_favorites){
+                                if(employee.user_favorite.length > 0){
+                                    if(employee.user_favorite[0].status == '1'){
+                                        if(v.rfid_64_status){
+                                            if(v.rfid_64_status == '1'){
+                                                if(employee.rfid_64){
+                                                    return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.rfid_64.toLowerCase().includes(this.keywords.toLowerCase())
+                                                }
+                                            }
+                                            else if(v.rfid_64_status == '0'){
+                                                if(employee.rfid_64 == "" || employee.rfid_64 == null){
+                                                    return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase())
+                                                }
+                                            }
+                                        }else{
+                                            return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) 
+                                        }
                                     }
                                 }
                             }else{
-                                return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) 
+                                if(v.rfid_64_status){
+                                    if(v.rfid_64_status == '1'){
+                                        if(employee.rfid_64){
+                                            return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.rfid_64.toLowerCase().includes(this.keywords.toLowerCase())
+                                        }
+                                    }
+                                    else if(v.rfid_64_status == '0'){
+                                        if(employee.rfid_64 == "" || employee.rfid_64 == null){
+                                            return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase())
+                                        }
+                                    }
+                                }else{
+                                    return full_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.first_name.toLowerCase().includes(this.keywords.toLowerCase()) || employee.last_name.toLowerCase().includes(this.keywords.toLowerCase()) 
+                                }
                             }
                         }
                         
