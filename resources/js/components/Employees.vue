@@ -560,7 +560,7 @@
                 // workbook.xls.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), file_name + `_EMPLOYEES.xls`)).catch(err => console.log('Error writing excel export', err));
 
                 workbook.xlsx.writeBuffer()
-                .then(buffer => FileSaver.saveAs(new Blob([buffer]), `Employee List.xlsx`))
+                .then(buffer => FileSaver.saveAs(new Blob([buffer]), `Employee List.xls`))
                 .catch(err => console.log('Error writing excel export', err));
 
             }

@@ -108,13 +108,11 @@ class AccessLogController extends Controller
     public function transferAccessGrantedLogByCards(Request $request){
         
         $date = date('Y-m-d');
-        
         $access_logs = AccessLog::where('MsgID','=','1')
                                     ->whereDate('LocalTime','=',$date)
                                     ->where('card_code',$request->card_code)
                                     ->orderBy('LocalTime','ASC')
                                     ->get();
-
         DB::beginTransaction();
         try{
             if($access_logs){
@@ -130,8 +128,6 @@ class AccessLogController extends Controller
                         'local_time'=>$local_time,
                         'direction'=>$item['Direction'],
                     ];
-
-                    
                     $employee_current_location = EmployeeCurrentAreaLocation::where('card_code',$card_code)->first();
                     if(empty($employee_current_location)){
                         EmployeeCurrentAreaLocation::create($data);
@@ -163,7 +159,6 @@ class AccessLogController extends Controller
                             }
                         }
                     }
-                    
                 }
                 return $reponse = [
                     'count' => $x
