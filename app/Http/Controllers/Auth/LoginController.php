@@ -46,7 +46,7 @@ class LoginController extends Controller
     public function authenticated(Request $request, $user) {
         $data = [
             'user_id'=>$user->id,
-            'log_date'=>Carbon::now()->toDateTimeString()
+            'log_date'=>date('Y-m-d')
         ];
         UserLog::create($data);
         $employee = Employee::select('id','user_id','id_number','first_name','last_name','middle_name','position','level')
