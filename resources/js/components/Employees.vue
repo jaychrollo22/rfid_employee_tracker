@@ -116,8 +116,7 @@
                                             <td width="20px" align="center" style="vertical-align: middle;">
                                                 <i class="fas fa-id-badge text-success" v-if="employee.rfid_64"
                                                     title="Registered"></i>
-                                                <i class="fas fa-id-badge text-danger" v-else
-                                                    title="Not Registered"></i>
+                                                <i class="fas fa-id-badge text-danger" v-else title="Not Registered"></i>
                                             </td>
                                             <td style="vertical-align: middle;">
                                                 <strong
@@ -175,8 +174,7 @@
                                             v-on:click="setPageEmployee(currentPageEmployee - 1)"> Previous </button>
                                         <span class="text-dark">Page {{ currentPageEmployee + 1 }} of
                                             {{ totalPagesEmployee }}</span>
-                                        <button :disabled="!showNextLinkEmployee()"
-                                            class="btn btn-default btn-sm btn-fill"
+                                        <button :disabled="!showNextLinkEmployee()" class="btn btn-default btn-sm btn-fill"
                                             v-on:click="setPageEmployee(currentPageEmployee + 1)"> Next </button>
                                     </span>
                                 </div>
@@ -209,7 +207,8 @@
                                     <select class="form-control" v-model="filter.company" id="company">
                                         <option value="">Choose Company</option>
                                         <option v-for="(company, v) in companies" v-bind:key="v" :value="company.id">
-                                            {{ company.name }}</option>
+                                            {{ company.name }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -229,7 +228,8 @@
                                     <select class="form-control" v-model="filter.location" id="location">
                                         <option value="">Choose Location</option>
                                         <option v-for="(location, v) in locations" v-bind:key="v" :value="location.id">
-                                            {{ location.name }}</option>
+                                            {{ location.name }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -537,6 +537,7 @@ export default {
             worksheet.getCell('K1').value = 'CardStatus';
             worksheet.getCell('L1').value = 'DoorIDNumber';
             worksheet.getCell('M1').value = 'UserID';
+            worksheet.getCell('N1').value = 'CardNo 26';
 
             // const mybase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==";
             // const imageId1 = workbook.addImage({
@@ -573,6 +574,7 @@ export default {
                 worksheet.getCell('K' + worksheet_ctr).value = '0';
                 worksheet.getCell('L' + worksheet_ctr).value = w.door_id_number;
                 worksheet.getCell('M' + worksheet_ctr).value = w.user_id;
+                worksheet.getCell('N' + worksheet_ctr).value = w.rfid_26;
 
                 worksheet_ctr++;
             })
@@ -746,6 +748,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
