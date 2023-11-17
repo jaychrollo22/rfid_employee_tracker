@@ -53,7 +53,7 @@
                                             </span>
                                         </div>
                                         <input type="text" class="form-control" placeholder="Search Employee"
-                                            v-model="keywords">
+                                            v-model="keywords" @keyup="handleTypingSearch">
                                     </div>
                                 </div>
                             </div>
@@ -330,6 +330,10 @@ export default {
         this.getDepartments();
     },
     methods: {
+        handleTypingSearch: _.debounce(function () {
+            this.getEmployees();
+
+        }, 1000),
         imageLoadError(event) {
             event.target.src = "/img/imagenotavailable.PNG";
         },
@@ -490,7 +494,7 @@ export default {
             v.loading = true;
             v.rfid_64_status = '';
             v.employees = [];
-            axios.get('/get-employees-data?company=' + v.filter.company + '&department=' + v.filter.department + '&location=' + v.filter.location + '&limit=' + v.filter.limit)
+            axios.get('/get-employees-data?company=' + v.filter.company + '&department=' + v.filter.department + '&location=' + v.filter.location + '&limit=' + v.filter.limit + '&keywords=' + v.keywords)
                 .then(response => {
                     v.employees = response.data;
                     v.loading = false;

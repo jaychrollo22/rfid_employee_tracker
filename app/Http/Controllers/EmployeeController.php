@@ -8,6 +8,7 @@ use App\EmployeeCurrentAreaLocationLog;
 use App\Location;
 use App\Department;
 use App\Company;
+use DB;
 use Auth;
 
 class EmployeeController extends Controller
@@ -33,17 +34,23 @@ class EmployeeController extends Controller
 
     public function getEmployeesData(Request $request){
         
+        $keywords = isset($request->keywords) ? $request->keywords : "";
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $location = isset($request->location) ? $request->location : "";
         $limit = isset($request->limit) ? $request->limit : 10;
         $employee_ids = session('employee_ids');
         if(session('role') == "Manager" || session('role') == "Administrator"){
+
+
             return $employee = Employee::select('id','user_id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','rfid_26','door_id_number')
                                         ->with('companies','departments','locations','employee_current_location_latest.rfid_controller')
                                         ->with(array('user_favorite'=>function($q){
                                             $q->where('auth_user_id',Auth::user()->id);
                                         }))
+                                        ->when(!empty($keywords),function($q) use($keywords){
+                                            $q->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%{$keywords}%");
+                                        })
                                         ->when(!empty($company),function($q) use($company){
                                             $q->whereHas('companies', function ($w) use($company)  {
                                                 $w->where('id', '=', $company);
