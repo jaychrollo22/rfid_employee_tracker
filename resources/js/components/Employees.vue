@@ -233,17 +233,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-6">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Location</label>
-                                    <select class="form-control" v-model="filter.current_location" id="current_location">
-                                        <option value="">Choose Current Location</option>
-                                        <option value="BGC"> BGC</option>
-                                        <option value="ILO"> ILO</option>
-                                        <option value="MNL"> MNL</option>
+                                    <label>Limit</label>
+                                    <select class="form-control" v-model="filter.limit" id="location">
+                                        <option value="">Choose Limit</option>
+                                        <option value="All">All</option>
+                                        <option value="10">10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="500">500</option>
                                     </select>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -308,9 +310,10 @@ export default {
             departments: [],
             companies: [],
             filter: {
-                'company': '',
-                'department': '',
-                'location': '',
+                company: '',
+                department: '',
+                location: '',
+                limit: 10,
             },
             map_employee: '',
             map_location: '',
@@ -487,7 +490,7 @@ export default {
             v.loading = true;
             v.rfid_64_status = '';
             v.employees = [];
-            axios.get('/get-employees-data?company=' + v.filter.company + '&department=' + v.filter.department + '&location=' + v.filter.location)
+            axios.get('/get-employees-data?company=' + v.filter.company + '&department=' + v.filter.department + '&location=' + v.filter.location + '&limit=' + v.filter.limit)
                 .then(response => {
                     v.employees = response.data;
                     v.loading = false;

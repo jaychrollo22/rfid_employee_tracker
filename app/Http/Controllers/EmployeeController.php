@@ -36,7 +36,7 @@ class EmployeeController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $location = isset($request->location) ? $request->location : "";
-
+        $limit = isset($request->limit) ? $request->limit : 10;
         $employee_ids = session('employee_ids');
         if(session('role') == "Manager" || session('role') == "Administrator"){
             return $employee = Employee::select('id','user_id','id_number','first_name','middle_name','last_name','cluster','position','rfid_64','rfid_26','door_id_number')
@@ -64,6 +64,9 @@ class EmployeeController extends Controller
                                         })
                                         ->where('status','Active')
                                         ->orderBy('last_name','ASC')
+                                        ->when($limit != 'All',function($q) use($limit){
+                                            $q->take($limit);
+                                        })
                                         ->get();
 
         }
