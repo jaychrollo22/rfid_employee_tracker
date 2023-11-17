@@ -1,433 +1,456 @@
 <template>
-<div>
-   <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        <div class="subheader py-2 py-lg-12 subheader-transparent" id="kt_subheader">
-            <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
-                <div class="d-flex align-items-center flex-wrap mr-1">
-                    <div class="d-flex flex-column">
-                        <h2 class="text-white font-weight-bold my-2 mr-5">History Logs</h2>
-                        <div class="d-flex align-items-center font-weight-bold my-2">
-                            <a href="#" class="opacity-75 hover-opacity-100">
-                                <i class="flaticon2-shelter text-white icon-1x"></i>
-                            </a>
-                            <span class="label label-dot label-sm bg-white opacity-75 mx-3"></span>
-                            <a href="" class="text-white text-hover-white opacity-75 hover-opacity-100">Track and Trace Employee</a>
+    <div>
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <div class="subheader py-2 py-lg-12 subheader-transparent" id="kt_subheader">
+                <div class="container d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+                    <div class="d-flex align-items-center flex-wrap mr-1">
+                        <div class="d-flex flex-column">
+                            <h2 class="text-white font-weight-bold my-2 mr-5">History Logs</h2>
+                            <div class="d-flex align-items-center font-weight-bold my-2">
+                                <a href="#" class="opacity-75 hover-opacity-100">
+                                    <i class="flaticon2-shelter text-white icon-1x"></i>
+                                </a>
+                                <span class="label label-dot label-sm bg-white opacity-75 mx-3"></span>
+                                <a href="" class="text-white text-hover-white opacity-75 hover-opacity-100">Track and Trace
+                                    Employee</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <a href="#" @click="refreshLogs" class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2">Refresh</a>
+                    <div class="d-flex align-items-center">
+                        <a href="#" @click="refreshLogs"
+                            class="btn btn-transparent-white font-weight-bold py-3 px-6 mr-2">Refresh</a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="d-flex flex-column-fluid">
-            <!--begin::Container-->
-            <div class="container">
-                <div class="card card-custom gutter-b">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <span class="float-right">
-                                    <!-- <a href="#" @click="refreshLogs"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" ></i> Refresh</a> -->
-                                    <a href="#" @click="download" class="text-default"><i class="fas fa-download text-default icon-md" title="Download" style="cursor:pointer;"></i> Download</a>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="d-flex mb-9">
-                            <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
-                                <div class="symbol symbol-50 symbol-lg-120">
-                                    <img v-if="employee" :src="'http://10.96.4.126:8668/storage/id_image/employee_image/'+employee.id+'.png'" alt="image" @error="setAltImg">
-                                </div>
-                                <div class="symbol symbol-50 symbol-lg-120 symbol-primary d-none">
-                                    <span class="font-size-h3 symbol-label font-weight-boldest" v-if="employee">{{employee.first_name + ' ' + employee.last_name}}</span>
+            <div class="d-flex flex-column-fluid">
+                <!--begin::Container-->
+                <div class="container">
+                    <div class="card card-custom gutter-b">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span class="float-right">
+                                        <!-- <a href="#" @click="refreshLogs"><i class="fas fa-sync text-primary icon-md"  title="Refresh" style="cursor:pointer;" ></i> Refresh</a> -->
+                                        <a href="#" @click="download" class="text-default"><i
+                                                class="fas fa-download text-default icon-md" title="Download"
+                                                style="cursor:pointer;"></i> Download</a>
+                                    </span>
                                 </div>
                             </div>
-                            <div v-if="loading" class="mt-5">
-                                <div class="spinner spinner-left spinner-primary spinner-lg">
-                                    <span class="ml-15">Loading.. Please wait..</span>
-                                </div>
-                            </div>
-                            <div v-else class="flex-grow-1">
-                                <div class="d-flex justify-content-between flex-wrap mt-1">
-                                    <div class="d-flex mr-3">
-                                        <a href="#" class="text-dark-75 text-hover-primary font-size-h5 font-weight-bold mr-3" >{{employee.first_name + ' ' + employee.last_name}}</a>
-                                        <a href="#">
-                                            <i class="flaticon2-correct text-success font-size-h5"></i>
-                                        </a>
+                            <div class="d-flex mb-9">
+                                <div class="flex-shrink-0 mr-7 mt-lg-0 mt-3">
+                                    <div class="symbol symbol-50 symbol-lg-120">
+                                        <img v-if="employee"
+                                            :src="'http://10.97.70.14:8668/storage/id_image/employee_image/' + employee.id + '.png'"
+                                            alt="image" @error="setAltImg">
+                                    </div>
+                                    <div class="symbol symbol-50 symbol-lg-120 symbol-primary d-none">
+                                        <span class="font-size-h3 symbol-label font-weight-boldest"
+                                            v-if="employee">{{ employee.first_name + ' ' + employee.last_name }}</span>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-wrap justify-content-between mt-1">
-                                    <div class="d-flex flex-column flex-grow-1 pr-8">
-                                        <div class="d-flex flex-wrap mb-4">
-                                            <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                            <i class="flaticon2-new-email mr-2 font-size-lg"></i>{{ employee.user ? employee.user.email : ""}}</a>
-                                            <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                            <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{employee.position}}</a>
-                                            <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                            <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{ employee.departments ? employee.departments[0].name : ""}}</a>
-                                            <a href="#" class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
-                                            <i class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{ employee.companies ? employee.companies[0].name : ""}}</a>
-                                        </div>
+                                <div v-if="loading" class="mt-5">
+                                    <div class="spinner spinner-left spinner-primary spinner-lg">
+                                        <span class="ml-15">Loading.. Please wait..</span>
                                     </div>
-                                    <div class="row col-md-12">
-                                         <div v-if="employee_current_location_latest">
-                                            <strong style="font-size:12px;cursor:pointer;" class="text-success" @click="showMap(employee_current_location_latest,employee)">{{ getCurrentLocation(employee_current_location_latest) }}</strong> <br>
-                                            <small style="font-size:11px">{{ changeDateFormat(employee_current_location_latest.local_time) }}</small>
-                                        </div>
-                                        <div v-else>
-                                            <span class="label font-weight-bold label-lg label-light-danger label-inline">Not Detected</span>
-                                        </div>
-                                    </div>
-                                   
                                 </div>
-                            </div>
-                        </div>
-                        <div class="float-right">
-                            Show
-                            <select v-model="itemsPerPageLog">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                            Total : {{ filteredLogs.length }}
-                        </div>
+                                <div v-else class="flex-grow-1">
+                                    <div class="d-flex justify-content-between flex-wrap mt-1">
+                                        <div class="d-flex mr-3">
+                                            <a href="#"
+                                                class="text-dark-75 text-hover-primary font-size-h5 font-weight-bold mr-3">{{ employee.first_name + ' ' + employee.last_name }}</a>
+                                            <a href="#">
+                                                <i class="flaticon2-correct text-success font-size-h5"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-between mt-1">
+                                        <div class="d-flex flex-column flex-grow-1 pr-8">
+                                            <div class="d-flex flex-wrap mb-4">
+                                                <a href="#"
+                                                    class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                    <i
+                                                        class="flaticon2-new-email mr-2 font-size-lg"></i>{{ employee.user ? employee.user.email : "" }}</a>
+                                                <a href="#"
+                                                    class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                    <i
+                                                        class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{ employee.position }}</a>
+                                                <a href="#"
+                                                    class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                    <i
+                                                        class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{ employee.departments ? employee.departments[0].name : "" }}</a>
+                                                <a href="#"
+                                                    class="text-dark-50 text-hover-primary font-weight-bold mr-lg-8 mr-5 mb-lg-0 mb-2">
+                                                    <i
+                                                        class="flaticon2-calendar-3 mr-2 font-size-lg"></i>{{ employee.companies ? employee.companies[0].name : "" }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="row col-md-12">
+                                            <div v-if="employee_current_location_latest">
+                                                <strong style="font-size:12px;cursor:pointer;" class="text-success"
+                                                    @click="showMap(employee_current_location_latest, employee)">{{ getCurrentLocation(employee_current_location_latest) }}</strong>
+                                                <br>
+                                                <small
+                                                    style="font-size:11px">{{ changeDateFormat(employee_current_location_latest.local_time) }}</small>
+                                            </div>
+                                            <div v-else>
+                                                <span
+                                                    class="label font-weight-bold label-lg label-light-danger label-inline">Not
+                                                    Detected</span>
+                                            </div>
+                                        </div>
 
-                        <div class="float-left mt-2">
-                            <input type="date" id="from" v-model="from" @change="date_range">
-                            <input type="date" id="to" v-model="to">
-                            <button @click="filterLogs">Filter</button>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-checkable" id="kt_datatable">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center"></th>
-                                        <th>Location</th>
-                                        <th>Date/Time</th>
-                                        <!-- <th>Duration</th> -->
-                                        <th>Duration/Stay</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(log, i) in filteredLogQueues" :key="i" >
-                                        <td width="20px">
-                                            <i class="fas fa-map-marker text-primary"></i>
-                                        </td>
-                                        <td>
-                                            <strong style="font-size:12px" class="text-default">{{ getCurrentLocation(log) }}</strong> <br>
-                                        </td>
-                                        <td>
-                                            <small style="font-size:12px">{{changeDateFormat(log.local_time)}}</small>
-                                        </td>
-                                        <!-- <td>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="float-right">
+                                Show
+                                <select v-model="itemsPerPageLog">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                Total : {{ filteredLogs.length }}
+                            </div>
+
+                            <div class="float-left mt-2">
+                                <input type="date" id="from" v-model="from" @change="date_range">
+                                <input type="date" id="to" v-model="to">
+                                <button @click="filterLogs">Filter</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-checkable" id="kt_datatable">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"></th>
+                                            <th>Location</th>
+                                            <th>Date/Time</th>
+                                            <!-- <th>Duration</th> -->
+                                            <th>Duration/Stay</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(log, i) in filteredLogQueues" :key="i">
+                                            <td width="20px">
+                                                <i class="fas fa-map-marker text-primary"></i>
+                                            </td>
+                                            <td>
+                                                <strong style="font-size:12px"
+                                                    class="text-default">{{ getCurrentLocation(log) }}</strong> <br>
+                                            </td>
+                                            <td>
+                                                <small style="font-size:12px">{{ changeDateFormat(log.local_time) }}</small>
+                                            </td>
+                                            <!-- <td>
                                             <small style="font-size:12px">{{ calculateDuration(i) }}</small>
                                         </td> -->
-                                        <td>
-                                            <small style="font-size:12px">{{ calculateStay(i) }}</small>
-                                        </td>
-                                    </tr>
-                                    <tr v-if="loading_logs">
-                                        <td colspan="3">
-                                            <div class="spinner spinner-left spinner-primary spinner-lg">
-                                                <span class="ml-15">Loading.. Please wait..</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row" v-if="filteredLogQueues.length">
-                            <div class="col-md-12">
-                                <span class="float-right">
-                                    <button :disabled="!showPreviousLinkLog()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLog(currentPageLog - 1)"> Previous </button>
-                                        <span class="text-dark">Page {{ currentPageLog + 1 }} of {{ totalPagesLog }}</span>
-                                    <button :disabled="!showNextLinkLog()" class="btn btn-default btn-sm btn-fill" v-on:click="setPageLog(currentPageLog + 1)"> Next </button>
-                                </span>
+                                            <td>
+                                                <small style="font-size:12px">{{ calculateStay(i) }}</small>
+                                            </td>
+                                        </tr>
+                                        <tr v-if="loading_logs">
+                                            <td colspan="3">
+                                                <div class="spinner spinner-left spinner-primary spinner-lg">
+                                                    <span class="ml-15">Loading.. Please wait..</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                           
+                            <div class="row" v-if="filteredLogQueues.length">
+                                <div class="col-md-12">
+                                    <span class="float-right">
+                                        <button :disabled="!showPreviousLinkLog()" class="btn btn-default btn-sm btn-fill"
+                                            v-on:click="setPageLog(currentPageLog - 1)"> Previous </button>
+                                        <span class="text-dark">Page {{ currentPageLog + 1 }} of {{ totalPagesLog }}</span>
+                                        <button :disabled="!showNextLinkLog()" class="btn btn-default btn-sm btn-fill"
+                                            v-on:click="setPageLog(currentPageLog + 1)"> Next </button>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Show Map -->
+        <div class="modal fade" id="door-map-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-lg modal-fixed" role="document">
+                <div class="modal-content">
+                    <div>
+                        <button type="button" class="close mt-2 mr-2" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-header">
+                        <h2 class="col-12 modal-title text-center">{{ map_employee }} | CURRENT LOCATION</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 justify-content-center mb-2 text-center" v-if="map_file">
+                                <img :src="'storage/map_file/' + map_file + '?v=' + Math.random()"
+                                    style="width:100%;height:auto;border:2px dotted;" @error="imageLoadError">
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
+
     </div>
-
-
-    <!-- Show Map -->
-    <div class="modal fade" id="door-map-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-fixed" role="document">
-            <div class="modal-content">
-                <div>
-                    <button type="button" class="close mt-2 mr-2" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div> 
-                <div class="modal-header">
-                    <h2 class="col-12 modal-title text-center">{{map_employee}} | CURRENT LOCATION</h2>
-                </div>
-                <div class="modal-body">
-                   <div class="row">
-                       <div class="col-md-12 justify-content-center mb-2 text-center" v-if="map_file">
-                            <img :src="'storage/map_file/'+map_file+'?v='+Math.random()" style="width:100%;height:auto;border:2px dotted;" @error="imageLoadError">
-                        </div>
-                   </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
 </template>
 
 <script>
-    import Excel from 'exceljs';
-    import FileSaver from 'file-saver';
-    export default {
-        data() {
-            return {
-                keywords: '',
-                employee : [],
-                employee_current_location_logs : [],
-                employee_current_location_latest : [],
-                errors : [],
-                currentPageLog: 0,
-                itemsPerPageLog: 10,
+import Excel from 'exceljs';
+import FileSaver from 'file-saver';
+export default {
+    data() {
+        return {
+            keywords: '',
+            employee: [],
+            employee_current_location_logs: [],
+            employee_current_location_latest: [],
+            errors: [],
+            currentPageLog: 0,
+            itemsPerPageLog: 10,
 
-                doors : [],
+            doors: [],
 
-                loading:false,
-                loading_logs:false,
+            loading: false,
+            loading_logs: false,
 
-                from : '',
-                to: '',
+            from: '',
+            to: '',
 
-                map_employee : '',
-                map_file : '',
+            map_employee: '',
+            map_file: '',
+        }
+    },
+    created() {
+        this.getCurrentTransferAccessLogs();
+        this.getRfidDoors();
+        this.getHistoryLogs();
+    },
+    methods: {
+        imageLoadError(event) {
+            event.target.src = "/img/imagenotavailable.PNG";
+        },
+        showMap(location, employee) {
+            this.map_file = '';
+            var map = this.getCurrentLocationMap(location);
+            if (map) {
+                this.map_employee = employee.user.name;
+                this.map_file = map;
+                $('#door-map-modal').modal('show');
             }
         },
-        created () {
-            this.getCurrentTransferAccessLogs();
-            this.getRfidDoors();
-            this.getHistoryLogs();
+        getCurrentLocationMap(current_location) {
+            let v = this;
+            var location = Object.values(v.doors).filter(door => {
+                if (current_location.controller_id == door.controller_id && current_location.door_id == door.door_id) {
+                    return door;
+                }
+            });
+            if (location.length > 0) {
+                return location[0].map_file;
+            }
         },
-        methods: {
-            imageLoadError(event) { 
-                event.target.src = "/img/imagenotavailable.PNG"; 
-            },
-            showMap(location,employee){
-                this.map_file = '';
-                var map = this.getCurrentLocationMap(location);
-                if(map){
-                    this.map_employee = employee.user.name;
-                    this.map_file = map;
-                    $('#door-map-modal').modal('show');
-                }
-            },
-            getCurrentLocationMap(current_location){
-                let v = this;
-                var location = Object.values(v.doors).filter(door => {
-                    if(current_location.controller_id == door.controller_id && current_location.door_id == door.door_id){
-                        return door;
-                    }
-                });
-                if(location.length > 0){
-                    return location[0].map_file;
-                }
-            },
-            calculateDuration(start){
-                let v = this;
+        calculateDuration(start) {
+            let v = this;
+            var end = Number(start) + 1;
+            var from = '';
+            var to = '';
+            if (v.filteredLogQueues[start] && v.filteredLogQueues[end]) {
+                from = v.filteredLogQueues[start].local_time;
+                to = v.filteredLogQueues[end].local_time;
+                return this.rendered(from, to);
+            }
+        },
+
+        calculateStay(start) {
+            let v = this;
+
+            if (start == 0) {
+                return "";
+            } else {
+                var start = Number(start) - 1;
                 var end = Number(start) + 1;
                 var from = '';
                 var to = '';
-                if(v.filteredLogQueues[start] && v.filteredLogQueues[end]){
+                if (v.filteredLogQueues[start] && v.filteredLogQueues[end]) {
                     from = v.filteredLogQueues[start].local_time;
                     to = v.filteredLogQueues[end].local_time;
-                    return this.rendered(from,to);
+                    return this.rendered(from, to);
                 }
-            },
+            }
 
-            calculateStay(start){
-                let v = this;
+        },
 
-                if(start == 0){
-                    return "";
-                }else{
-                    var start = Number(start) - 1;
-                    var end = Number(start) + 1;
-                    var from = '';
-                    var to = '';
-                    if(v.filteredLogQueues[start] && v.filteredLogQueues[end]){
-                        from = v.filteredLogQueues[start].local_time;
-                        to = v.filteredLogQueues[end].local_time;
-                        return this.rendered(from,to);
-                    }
+        rendered(endTime, startTime) {
+            if (endTime && startTime) {
+                var ms = moment(endTime, "YYYY/MM/DD HH:mm:ss a").diff(moment(startTime, "YYYY/MM/DD HH:mm:ss a"));
+                var d = moment.duration(ms);
+                var hours = Math.floor(d.asHours());
+                var minutes = moment.utc(ms).format("mm");
+                var seconds = moment.utc(ms).format("ss");
+                return hours + 'h ' + minutes + 'm ' + seconds + 's';
+            } else {
+                return 0;
+            }
+        },
+        date_range() {
+            document.getElementById('to').min = this.from;
+        },
+        changeDateFormat(log_time) {
+            var new_log_time = moment(log_time).format('LL LTS');
+            return new_log_time;
+        },
+        setAltImg(event) {
+            event.target.src = "/img/default.jpg";
+        },
+        getCurrentLocation(current_location) {
+            let v = this;
+            var location = Object.values(v.doors).filter(door => {
+                if (current_location.controller_id == door.controller_id && current_location.door_id == door.door_id) {
+                    return door;
                 }
-                
-            },
-
-            rendered(endTime, startTime){ 
-                if(endTime && startTime){
-                    var ms = moment(endTime,"YYYY/MM/DD HH:mm:ss a").diff(moment(startTime,"YYYY/MM/DD HH:mm:ss a"));
-                    var d = moment.duration(ms);
-                    var hours = Math.floor(d.asHours());
-                    var minutes = moment.utc(ms).format("mm");
-                    var seconds = moment.utc(ms).format("ss");
-                    return hours + 'h '+ minutes+'m ' + seconds + 's'; 
-                }else{
-                    return 0;
-                }                                  
-            },
-            date_range()
-            {
-                document.getElementById('to').min = this.from;
-            },
-            changeDateFormat(log_time){
-                var new_log_time = moment(log_time).format('LL LTS');
-                return new_log_time;
-            },
-            setAltImg(event) { 
-                event.target.src = "/img/default.jpg"; 
-            },
-            getCurrentLocation(current_location){
-                let v = this;
-                var location = Object.values(v.doors).filter(door => {
-                    if(current_location.controller_id == door.controller_id && current_location.door_id == door.door_id){
-                        return door;
-                    }
-                });
-                if(location.length > 0){
-                    return location[0].door_name;
-                }
-            },
-            getRfidDoors() {
-                let v = this;
-                v.doors = [];
-                axios.get('/get-rfid-settings-doors-data')
-                .then(response => { 
+            });
+            if (location.length > 0) {
+                return location[0].door_name;
+            }
+        },
+        getRfidDoors() {
+            let v = this;
+            v.doors = [];
+            axios.get('/get-rfid-settings-doors-data')
+                .then(response => {
                     v.doors = response.data;
                 })
-                .catch(error => { 
+                .catch(error => {
                     v.errors = error.response.data.error;
                 })
-            },
-            getHistoryLogs() {
-                let v = this;
-                v.employee = '';
-                v.loading = true;
-                axios.get('/view-history-logs-data?from='+this.from + '&to='+this.to)
-                .then(response => { 
+        },
+        getHistoryLogs() {
+            let v = this;
+            v.employee = '';
+            v.loading = true;
+            axios.get('/view-history-logs-data?from=' + this.from + '&to=' + this.to)
+                .then(response => {
                     v.employee = response.data;
                     v.employee_current_location_logs = response.data.employee_current_location_logs;
                     v.employee_current_location_latest = response.data.employee_current_location_latest;
                     v.loading = false;
                 })
-                .catch(error => { 
+                .catch(error => {
                     v.errors = error.response.data.error;
                     v.loading = false;
                 })
-            },
-            refreshLogs() {
-                this.employee_current_location_logs = [];
-                this.getCurrentTransferAccessLogs();
-                this.getHistoryLogs();
-            },
-            getCurrentTransferAccessLogs(){
-                axios.get('/transfer-access-log');
-            },
-            filterLogs() {
-                let v = this;
-                v.loading_logs = true;
-                v.employee_current_location_logs = [];
-                axios.get('/view-history-logs-data?employee_id='+v.employee.id+'&from='+v.from+'&to='+v.to)
-                .then(response => { 
+        },
+        refreshLogs() {
+            this.employee_current_location_logs = [];
+            this.getCurrentTransferAccessLogs();
+            this.getHistoryLogs();
+        },
+        getCurrentTransferAccessLogs() {
+            axios.get('/transfer-access-log');
+        },
+        filterLogs() {
+            let v = this;
+            v.loading_logs = true;
+            v.employee_current_location_logs = [];
+            axios.get('/view-history-logs-data?employee_id=' + v.employee.id + '&from=' + v.from + '&to=' + v.to)
+                .then(response => {
                     v.employee_current_location_latest = response.data.employee_current_location_latest;
                     v.employee_current_location_logs = response.data.employee_current_location_logs;
                     v.loading_logs = false;
                 })
-                .catch(error => { 
+                .catch(error => {
                     v.errors = error.response.data.error;
                     v.loading_logs = false;
                 })
-            },
-            setPageLog(pageNumber) {
-                this.currentPageLog = pageNumber;
-            },
-            resetStartRowLog() {
+        },
+        setPageLog(pageNumber) {
+            this.currentPageLog = pageNumber;
+        },
+        resetStartRowLog() {
+            this.currentPageLog = 0;
+        },
+        showPreviousLinkLog() {
+            return this.currentPageLog == 0 ? false : true;
+        },
+        showNextLinkLog() {
+            return this.currentPageLog == (this.totalPagesLog - 1) ? false : true;
+        },
+        download() {
+            let v = this;
+            var workbook = new Excel.Workbook();
+            var employee = v.employee.first_name + ' ' + v.employee.last_name;
+            var worksheet = workbook.addWorksheet(employee, { pageSetup: { paperSize: 5, orientation: 'landscape' } });
+            worksheet.pageSetup.margins = {
+                left: 0.25, right: 0.25,
+                top: 0.75, bottom: 0.75,
+                header: 0.3, footer: 0.3
+            };
+
+            //Header-------------------------------------------------------------------?
+            worksheet.columns = [{ width: 30 }, { width: 30 }, { width: 30 }, { width: 30 }];
+
+            worksheet.getCell('A1').value = 'Location';
+            worksheet.getCell('B1').value = 'Date/Time';
+            // worksheet.getCell('C1').value = 'Duration';
+            worksheet.getCell('C1').value = 'Duration/Stay';
+
+            let worksheet_ctr = 2;
+            v.employee_current_location_logs.forEach(function (w, i) {
+                worksheet.getCell('A' + worksheet_ctr).value = v.getCurrentLocation(w);
+                worksheet.getCell('B' + worksheet_ctr).value = v.changeDateFormat(w.local_time);
+                // worksheet.getCell('C'+worksheet_ctr).value = v.calculateDuration(i);
+                worksheet.getCell('C' + worksheet_ctr).value = v.calculateStay(i);
+                worksheet_ctr++;
+            })
+
+            //Download
+            workbook.xlsx.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), v.employee.first_name + ' ' + v.employee.last_name + ` View History Logs.xlsx`)).catch(err => console.log('Error writing excel export', err));
+        }
+    },
+    computed: {
+        filteredLogs() {
+            let v = this;
+            if (v.employee_current_location_logs) {
+                return Object.values(v.employee_current_location_logs);
+            } else {
+                return [];
+            }
+
+        },
+        totalPagesLog() {
+            return Math.ceil(Object.values(this.filteredLogs).length / Number(this.itemsPerPageLog))
+        },
+        filteredLogQueues() {
+            var index = this.currentPageLog * Number(this.itemsPerPageLog);
+            var queues_array = this.filteredLogs.slice(index, index + Number(this.itemsPerPageLog));
+
+            if (this.currentPageLog >= this.totalPagesLog) {
+                this.currentPageLog = this.totalPagesLog - 1
+            }
+
+            if (this.currentPageLog == -1) {
                 this.currentPageLog = 0;
-            },
-            showPreviousLinkLog() {
-                return this.currentPageLog == 0 ? false : true;
-            },
-            showNextLinkLog() {
-                return this.currentPageLog == (this.totalPagesLog - 1) ? false : true;
-            },
-            download(){
-                let v = this;
-                var workbook = new Excel.Workbook();
-                var employee = v.employee.first_name + ' ' + v.employee.last_name;
-                var worksheet = workbook.addWorksheet(employee,{pageSetup:{paperSize: 5, orientation:'landscape'}});
-                worksheet.pageSetup.margins = {
-                    left: 0.25, right: 0.25,
-                    top: 0.75, bottom: 0.75,
-                    header: 0.3, footer: 0.3
-                };
-
-                //Header-------------------------------------------------------------------?
-                worksheet.columns = [{ width: 30 },{ width: 30},{ width: 30},{ width: 30}];
-
-                worksheet.getCell('A1').value = 'Location';
-                worksheet.getCell('B1').value = 'Date/Time';
-                // worksheet.getCell('C1').value = 'Duration';
-                worksheet.getCell('C1').value = 'Duration/Stay';
-
-                let worksheet_ctr = 2;
-                v.employee_current_location_logs.forEach(function(w,i){
-                    worksheet.getCell('A'+worksheet_ctr).value = v.getCurrentLocation(w);
-                    worksheet.getCell('B'+worksheet_ctr).value = v.changeDateFormat(w.local_time);
-                    // worksheet.getCell('C'+worksheet_ctr).value = v.calculateDuration(i);
-                    worksheet.getCell('C'+worksheet_ctr).value = v.calculateStay(i);
-                    worksheet_ctr++;
-                })
-
-                //Download
-                workbook.xlsx.writeBuffer().then(buffer => FileSaver.saveAs(new Blob([buffer]), v.employee.first_name + ' ' + v.employee.last_name +  ` View History Logs.xlsx`)).catch(err => console.log('Error writing excel export', err));
             }
-        },
-        computed: {
-            filteredLogs(){
-                let v = this;
-                if(v.employee_current_location_logs){
-                    return Object.values(v.employee_current_location_logs);
-                }else{
-                    return [];
-                }
-               
-            },
-            totalPagesLog() {
-                return Math.ceil(Object.values(this.filteredLogs).length / Number(this.itemsPerPageLog))
-            },
-            filteredLogQueues() {
-                var index = this.currentPageLog * Number(this.itemsPerPageLog);
-                var queues_array = this.filteredLogs.slice(index, index + Number(this.itemsPerPageLog));
 
-                if(this.currentPageLog >= this.totalPagesLog) {
-                    this.currentPageLog = this.totalPagesLog - 1
-                }
-
-                if(this.currentPageLog == -1) {
-                    this.currentPageLog = 0;
-                }
-
-                return queues_array;
-            }
-        },
-    }
+            return queues_array;
+        }
+    },
+}
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
