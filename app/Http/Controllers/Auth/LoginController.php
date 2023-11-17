@@ -11,6 +11,9 @@ use App\UserLog;
 use App\AssignHead;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
+use Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -110,10 +113,10 @@ class LoginController extends Controller
                 'employee_rfids' => $employee_rfids,
             ]);
         }else{
-            session([
-                'user' => $employee,
-                'role' => $role,
-            ]);
+
+            Auth::logout();
+            return redirect()->route('login');
+            
         }
 
        
