@@ -113,10 +113,10 @@ class LoginController extends Controller
                 'employee_rfids' => $employee_rfids,
             ]);
         }else{
-
-            Auth::logout();
-            return redirect()->route('login');
-            
+            session([
+                'user' => $employee,
+                'role' => $role,
+            ]);
         }
 
        
