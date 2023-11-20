@@ -97,8 +97,8 @@ Route::get('/employee-per-count',function(Request $request){
     $employee = GocEmployee::where('status',"Active")
                                 ->with(['employee_current_location_logs'=>function($q) use($from, $to){
                                     $q->with('rfid_controller')
-                                            ->whereBetween('created_at',[$from." 00:00:01", $to." 23:59:59"])
-                                            ->orderBy('created_at');
+                                            ->whereBetween('local_time',[$from." 00:00:01", $to." 23:59:59"])
+                                            ->orderBy('local_time','DESC');
                                 }]);
     if($search){
         $employee->where('name','like','%'.$search.'%');
