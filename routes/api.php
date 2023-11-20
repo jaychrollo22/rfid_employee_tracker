@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\RfidNumber;
 
+use App\GocEmployee;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -85,6 +87,17 @@ use App\RfidNumber;
 // Route::get('/scan-rfids',function(){
 // return $rfid_scans = RfidNumber::orderBy('LocalTime','DESC')->orderBy('CardBits','DESC')->get()->take(2);
 // });
+
+Route::get('/employee-per-count',function(){
+    return $employee = GocEmployee::where('status',"Active")
+                                ->with(['employee_current_location_logs'=>function($q){
+                                    $q->select('card_code','controller_id', \DB::raw('count(*) as log_count'))
+                                        ->with('rfid_controller')
+                                        ->whereDate('created_at',date('Y-m-d'))
+                                        ->groupBy('controller_id','card_code');
+                                }])
+                                ->get();
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
