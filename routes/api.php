@@ -95,11 +95,13 @@ Route::get('/employee-per-count',function(Request $request){
 
     return $employee = GocEmployee::where('status',"Active")
                                 ->with(['employee_current_location_logs'=>function($q) use($from, $to){
-                                    $q->select('card_code','controller_id', \DB::raw('count(*) as log_count'))
+                                    $q->select('card_code','controller_id','local_time', \DB::raw('count(*) as log_count'))
                                             ->with('rfid_controller')
                                             ->whereBetween('created_at',[$from." 00:00:01", $to." 23:59:59"])
-                                            ->groupBy('controller_id','card_code');
+                                            ->groupBy('controller_id','card_code','local_time')
+                                            ->orderBy('created_at');
                                 }])
+                                ->where('user_id','2693')
                                 ->get();
 });
 
