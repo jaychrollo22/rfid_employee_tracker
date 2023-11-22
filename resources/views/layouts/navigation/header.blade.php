@@ -86,6 +86,12 @@
                                                 <span class="menu-desc"></span>
                                             </a>
                                         </li>
+                                        <li class="menu-item" aria-haspopup="true">
+                                            <a href="{{ url('reports-employee-per-count') }}" class="menu-link">
+                                                <span class="menu-text">RFID Employee per Device</span>
+                                                <span class="menu-desc"></span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>

@@ -88,46 +88,8 @@ use App\GocEmployee;
 // return $rfid_scans = RfidNumber::orderBy('LocalTime','DESC')->orderBy('CardBits','DESC')->get()->take(2);
 // });
 
-Route::get('/employee-per-count',function(Request $request){
-
-    $from = isset($request->from) ? $request->from : date('Y-m-d');
-    $to = isset($request->to) ? $request->to : date('Y-m-d');
-    $limit = isset($request->limit) ?  $request->limit : 10;
-    $search = isset($request->search) ?  $request->search : '';
-    $employee = GocEmployee::where('status',"Active")
-                                ->with(['employee_current_location_logs'=>function($q) use($from, $to){
-                                    $q->with('rfid_controller')
-                                            ->whereBetween('local_time',[$from." 00:00:01", $to." 23:59:59"])
-                                            ->orderBy('local_time','DESC');
-                                }]);
-    if($search){
-        $employee->where('name','like','%'.$search.'%');
-    }
-
-    return $employee->paginate($limit);
-});
-
-
-Route::get('/employee-per-late-count',function(Request $request){
-
-    $from = isset($request->from) ? $request->from : date('Y-m-d');
-    $to = isset($request->to) ? $request->to : date('Y-m-d');
-    $limit = isset($request->limit) ?  $request->limit : 10;
-    $search = isset($request->search) ?  $request->search : '';
-
-    $employee = GocEmployee::where('status',"Active")
-                                ->with(['employee_current_location_logs'=>function($q) use($from, $to){
-                                    $q->with('rfid_controller')
-                                            ->whereBetween('local_time',[$from." 00:00:01", $to." 23:59:59"])
-                                            ->orderBy('local_time','ASC');
-                                }]);
-                                
-    if($search){
-        $employee->where('name','like','%'.$search.'%');
-    }
-
-    return $employee->paginate($limit);
-});
+Route::get('/employee-per-count','ApiController@getEmployeePerCount');
+Route::get('/employee-per-late-count','ApiController@getEmployeePerLateCount');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

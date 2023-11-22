@@ -19,6 +19,8 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('table-pagination', require('./components/Common/TablePagination.vue').default);
+
 Vue.component('dashboard', require('./components/Dashboard.vue').default);
 Vue.component('employees', require('./components/Employees.vue').default);
 Vue.component('view-history-logs', require('./components/ViewHistoryLogs.vue').default);
@@ -30,6 +32,8 @@ Vue.component('rfid-doors', require('./components/RfidDoors.vue').default);
 // Reports
 Vue.component('reports-employee-locations', require('./components/ReportsEmployeeLocations.vue').default);
 Vue.component('reports-by-doors', require('./components/ReportsByDoors.vue').default);
+
+Vue.component('reports-employee-per-count', require('./components/ReportsEmployeePerCount.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

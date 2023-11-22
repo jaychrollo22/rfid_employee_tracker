@@ -72,3 +72,9 @@ Route::get('/delete-invalid-access-log', 'AccessLogController@deleteInvalidAcces
 //Reports
 Route::get('/reports-employee-locations','ReportsController@reportsEmployeeLocations');
 Route::get('/reports-by-doors','ReportsController@reportsByDoors');
+
+//Reports
+Route::get('/reports-employee-per-count','ReportsController@reportsEmployeePerCount');
+Route::group(['prefix' => 'reports-employee-per-count'], function () {
+    Route::get('/all','EmployeeReportsController@getEmployeePerCount');
+});

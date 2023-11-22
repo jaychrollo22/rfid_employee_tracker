@@ -17,6 +17,6 @@ class GocEmployee extends Model
 
     public function employee_current_location_logs()
     {
-        return $this->hasMany('App\EmployeeCurrentAreaLocationLog','card_code','rfid_64')->orderBy('local_time','DESC');
+        return $this->hasMany('App\EmployeeCurrentAreaLocationLog','card_code','rfid_64')->select('card_code','controller_id','door_id');
     }
 }

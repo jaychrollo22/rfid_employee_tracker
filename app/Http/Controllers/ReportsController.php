@@ -31,4 +31,8 @@ class ReportsController extends Controller
     public function reportsByDoors(){
         return view('reports.reports_by_doors');
     }
+
+    public function reportsEmployeePerCount(){
+        return view('reports.reports_employee_per_count');
+    }
 }
