@@ -80,15 +80,21 @@
                                                 <span class="menu-desc"></span>
                                             </a>
                                         </li> --}}
-                                        <li class="menu-item" aria-haspopup="true">
+                                        {{-- <li class="menu-item" aria-haspopup="true">
                                             <a href="{{ url('reports-by-doors') }}" class="menu-link">
                                                 <span class="menu-text">By Doors</span>
                                                 <span class="menu-desc"></span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="menu-item" aria-haspopup="true">
                                             <a href="{{ url('reports-employee-per-count') }}" class="menu-link">
-                                                <span class="menu-text">RFID Employee per Device</span>
+                                                <span class="menu-text">Employee per Device</span>
+                                                <span class="menu-desc"></span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item" aria-haspopup="true">
+                                            <a href="{{ url('reports-employee-per-late-count') }}" class="menu-link">
+                                                <span class="menu-text">Employee Lates</span>
                                                 <span class="menu-desc"></span>
                                             </a>
                                         </li>
