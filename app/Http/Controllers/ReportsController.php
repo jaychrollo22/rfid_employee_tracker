@@ -33,6 +33,18 @@ class ReportsController extends Controller
     }
 
     public function reportsEmployeePerCount(){
+        session([
+            'title' => 'Employee per Device Count',
+        ]);
+
         return view('reports.reports_employee_per_count');
+    }
+
+    public function reportsEmployeePerLateCount(){
+        session([
+            'title' => 'Employee per Late Count',
+        ]);
+
+        return view('reports.reports_employee_per_late_count');
     }
 }

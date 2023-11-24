@@ -78,3 +78,8 @@ Route::get('/reports-employee-per-count','ReportsController@reportsEmployeePerCo
 Route::group(['prefix' => 'reports-employee-per-count'], function () {
     Route::get('/all','EmployeeReportsController@getEmployeePerCount');
 });
+
+Route::get('/reports-employee-per-late-count','ReportsController@reportsEmployeePerLateCount');
+Route::group(['prefix' => 'reports-employee-per-late-count'], function () {
+    Route::get('/all','EmployeeReportsController@getEmployeePerLateCount');
+});

@@ -9,7 +9,7 @@ use DB;
 class EmployeeReportsController extends Controller
 {
     public function getEmployeePerCount(Request $request){
-
+        
         $from = isset($request->from) ? date('Y-m-d',strtotime($request->from)) : date('Y-m-d');
         $to = isset($request->to) ? date('Y-m-d',strtotime($request->to)) : date('Y-m-d');
         $limit = isset($request->limit) ?  $request->limit : 10;
@@ -44,10 +44,9 @@ class EmployeeReportsController extends Controller
         $employee_ids = session('employee_ids');
         
         $employee = GocEmployee::where('status',"Active")
-                                    ->with(['employee_current_location_logs'=>function($q) use($from, $to){
+                                    ->with(['employee_current_location_first_logs'=>function($q) use($from, $to){
                                         $q->with('rfid_controller')
-                                                ->whereBetween('local_time',[$from." 00:00:01", $to." 23:59:59"])
-                                                ->orderBy('local_time','ASC');
+                                                ->whereBetween('local_time',[$from." 00:00:01", $to." 23:59:59"]);
                                     }])
                                     ->when(session('role') == "Manager",function($q) use($employee_ids){
                                         $q->whereIn('id',$employee_ids);

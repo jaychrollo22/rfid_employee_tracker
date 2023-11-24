@@ -88,9 +88,6 @@ use App\GocEmployee;
 // return $rfid_scans = RfidNumber::orderBy('LocalTime','DESC')->orderBy('CardBits','DESC')->get()->take(2);
 // });
 
-Route::get('/employee-per-count','ApiController@getEmployeePerCount');
-Route::get('/employee-per-late-count','ApiController@getEmployeePerLateCount');
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

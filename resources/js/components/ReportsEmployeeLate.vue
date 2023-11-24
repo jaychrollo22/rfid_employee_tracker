@@ -63,7 +63,8 @@
                                             <th>Department</th>
                                             <th>Company</th>
                                             <th>Location</th>
-                                            <th>Device Logs</th>
+                                            <th>Arrival Time</th>
+                                            <th>Late</th>
                                             <td></td>
                                         </tr>
                                     </thead>
@@ -95,13 +96,14 @@
                                                 <small>{{ item.location }}</small>
                                             </td>
                                             <td style="vertical-align: middle;">
-                                                <small v-if="item.employee_current_location_logs.length > 0">
-                                                    <ul v-for="(log, x) in item.employee_current_location_logs" :key="x">
-                                                        <li>{{ getCurrentLocation(log) }} : <strong>{{ log.count }}</strong>
-                                                        </li>
-                                                    </ul>
+                                                <small v-if="item.employee_current_location_first_logs">
+                                                    {{ item.employee_current_location_first_logs.local_time }}
                                                 </small>
                                                 <small v-else class="text-danger">No Logs Detected</small>
+                                            </td>
+                                            <td style="vertical-align: middle;">
+                                                <small v-if="item.employee_current_location_first_logs">
+                                                    {{ timeDifference(item.employee_current_location_first_logs.local_time) }}</small>
                                             </td>
                                             <td style="vertical-align: middle;">
                                                 <a :href="'/view-history-logs?id=' + item.employee_id + '&v=' + Math.random()"
@@ -130,7 +132,7 @@ export default {
     mixins: [listFormMixins],
     data() {
         return {
-            endpoint: '/reports-employee-per-count',
+            endpoint: '/reports-employee-per-late-count',
             doors: [],
         }
     },
@@ -140,6 +142,38 @@ export default {
         this.fetchList();
     },
     methods: {
+        timeDifference(start_time) {
+
+            let startDateTime = new Date(start_time);
+
+            const year = startDateTime.getFullYear();
+            const month = String(startDateTime.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(startDateTime.getDate()).padStart(2, '0');
+
+            let endDateTime = new Date(year + '-' + month + '-' + day + ' 08:00:00');
+
+            if (startDateTime > endDateTime) {
+
+                // Compute the difference in milliseconds
+                const differenceInMilliseconds = startDateTime - endDateTime;
+
+                // Convert milliseconds to seconds, minutes, and hours
+                const seconds = Math.floor(differenceInMilliseconds / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+
+                // Calculate remaining minutes and seconds
+                const remainingMinutes = minutes % 60;
+                const remainingSeconds = seconds % 60;
+
+                if (hours > 0) {
+                    return hours + ' hours ' + remainingMinutes + ' minutes ' + remainingSeconds + ' seconds';
+                } else {
+                    return remainingMinutes + ' minutes ' + remainingSeconds + ' seconds';
+                }
+            }
+
+        },
         getCurrentLocation(current_location) {
             let v = this;
             var location = Object.values(v.doors).filter(door => {

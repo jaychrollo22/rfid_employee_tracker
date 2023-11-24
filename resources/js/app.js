@@ -34,6 +34,7 @@ Vue.component('reports-employee-locations', require('./components/ReportsEmploye
 Vue.component('reports-by-doors', require('./components/ReportsByDoors.vue').default);
 
 Vue.component('reports-employee-per-count', require('./components/ReportsEmployeePerCount.vue').default);
+Vue.component('reports-employee-per-late-count', require('./components/ReportsEmployeeLate.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
